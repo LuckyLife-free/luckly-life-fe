@@ -16,7 +16,9 @@ export function WithBottomBar(props: PropsWithChildren) {
   const navigate = useNavigate()
   const location = useLocation()
   const [value, setValue] = useBottomTab()
-  const [opacity, setOpacity] = useState(0.05)
+  const [opacity, setOpacity] = useState(
+    (import.meta as any).env.MODE === 'development' ? 0.05 : 1
+  )
 
   useEffectOnce(() => {
     if (location.pathname.match('/home')) {
