@@ -1,0 +1,308 @@
+type Article implements System {
+  """
+  文章作者
+  """
+  author: User!
+
+  """
+  文章内容-序列化字符串
+  """
+  content: String!
+
+  """
+  文章封面
+  """
+  cover: Image
+
+  """
+  创建时间
+  """
+  createTime: Date!
+  id: String!
+
+  """
+  内容简介
+  """
+  summary: String!
+
+  """
+  标签分类
+  """
+  tags: [Tag!]!
+
+  """
+  文章标题
+  """
+  title: String!
+
+  """
+  更新时间
+  """
+  updateTime: Date!
+}
+
+type AuthInfo {
+  token: String!
+  userId: String!
+}
+
+input CreateArticleInput {
+  """
+  文章内容-序列化字符串
+  """
+  content: String!
+
+  """
+  文章封面
+  """
+  cover: IdInput
+
+  """
+  内容简介
+  """
+  summary: String!
+
+  """
+  标签绑定
+  """
+  tags: [IdInput!]!
+
+  """
+  文章标题
+  """
+  title: String!
+}
+
+"""
+Date custom scalar type
+"""
+scalar Date
+
+input IdInput {
+  id: String!
+}
+
+type Image {
+  name: String!
+  url: String!
+}
+
+type Mutation {
+  """
+  新建文章帖子
+  """
+  createArticle(input: CreateArticleInput!): Boolean!
+
+  """
+  删除文章帖子
+  """
+  deleteArticle(input: IdInput!): Boolean!
+  loginByEmail(email: String!, password: String!): AuthInfo!
+  logonByEmail(
+    email: String!
+    password: String!
+    verificationCode: String!
+  ): AuthInfo!
+  resetPasswordByEmail(
+    email: String!
+    password: String!
+    verificationCode: String!
+  ): Boolean!
+  sayHello(hello: String): Boolean!
+  sendEmailVerificationCode(email: String!): Boolean
+
+  """
+  喜欢文章帖子
+  """
+  starArticle(input: IdInput!): Boolean!
+
+  """
+  取消喜欢文章帖子
+  """
+  unStarArticle(input: IdInput!): Boolean!
+
+  """
+  更新文章帖子
+  """
+  updateArticle(input: UpdateArticleInput!): Boolean!
+
+  """
+  更新用户信息
+  """
+  updateMe(input: UpdateMeInput!): Boolean!
+}
+
+type Query {
+  hello: String!
+
+  """
+  主页推送文章
+  """
+  homeArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
+
+  """
+  主页推送用户
+  """
+  homeUserList(filter: SearchInput, limit: Int, offset: Int): [User!]!
+
+  """
+  获取当前用户信息
+  """
+  me: User
+
+  """
+  我发布的文章
+  """
+  myArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
+
+  """
+  我喜欢的文章
+  """
+  myStarArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
+
+  """
+  标签列表
+  """
+  tagList(filter: TagListInput, limit: Int, offset: Int): [Tag!]!
+}
+
+input SearchInput {
+  """
+  模糊搜索
+  """
+  search: String
+}
+
+type Subscription {
+  helloWs: String!
+}
+
+interface System {
+  createTime: Date!
+  updateTime: Date!
+}
+
+type Tag implements System {
+  """
+  创建时间
+  """
+  createTime: Date!
+  id: String!
+
+  """
+  是否为预设标签
+  """
+  isPreset: Boolean!
+
+  """
+  标签名称
+  """
+  name: String!
+
+  """
+  标签类型
+  """
+  type: TagType!
+
+  """
+  更新时间
+  """
+  updateTime: Date!
+}
+
+input TagListInput {
+  """
+  标签类型
+  """
+  type: TagType
+}
+
+enum TagType {
+  """
+  文章
+  """
+  ARTICLE
+}
+
+input UpdateArticleInput {
+  """
+  文章内容-序列化字符串
+  """
+  content: String!
+
+  """
+  文章封面
+  """
+  cover: IdInput
+  id: String!
+
+  """
+  内容简介
+  """
+  summary: String!
+
+  """
+  标签绑定
+  """
+  tags: [IdInput!]!
+
+  """
+  文章标题
+  """
+  title: String!
+}
+
+input UpdateMeInput {
+  """
+  头像
+  """
+  avatar: IdInput
+
+  """
+  名称
+  """
+  name: String
+
+  """
+  个性签名
+  """
+  signature: String
+}
+
+type User implements System {
+  """
+  头像
+  """
+  avatar: Image
+
+  """
+  创建时间
+  """
+  createTime: Date!
+
+  """
+  邮箱
+  """
+  email: String!
+  id: String!
+
+  """
+  名称
+  """
+  name: String!
+
+  """
+  个性签名
+  """
+  signature: String
+
+  """
+  更新时间
+  """
+  updateTime: Date!
+}
+
+"""
+Void custom scalar type
+"""
+scalar Void

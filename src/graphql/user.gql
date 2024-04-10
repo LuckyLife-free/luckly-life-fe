@@ -1,0 +1,11 @@
+query HomeUserList($filter: SearchInput, $limit: Int, $offset: Int) {
+  homeUserList(filter: $filter, limit: $limit, offset: $offset) {
+    id
+    avatar {
+      name
+      url
+    }
+    name
+    signature
+  }
+}

@@ -1,0 +1,40 @@
+mutation CreateArticle($input: CreateArticleInput!) {
+  createArticle(input: $input)
+}
+
+mutation UpdateArticle($input: UpdateArticleInput!) {
+  updateArticle(input: $input)
+}
+
+mutation DeleteArticle($input: IdInput!) {
+  deleteArticle(input: $input)
+}
+
+query HomeArticleList($filter: SearchInput, $limit: Int, $offset: Int) {
+  homeArticleList(filter: $filter, limit: $limit, offset: $offset) {
+    author {
+      name
+    }
+    content
+    cover {
+      name
+      url
+    }
+    createTime
+    id
+    summary
+    tags {
+      name
+    }
+    title
+    updateTime
+  }
+}
+
+query TagList($filter: TagListInput, $limit: Int, $offset: Int) {
+  tagList(filter: $filter, limit: $limit, offset: $offset) {
+    id
+    name
+    type
+  }
+}

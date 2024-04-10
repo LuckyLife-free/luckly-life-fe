@@ -1,0 +1,37 @@
+mutation LoginByEmail($email: String!, $password: String!) {
+  loginByEmail(email: $email, password: $password) {
+    userId
+    token
+  }
+}
+
+mutation SendEmailVerificationCode($email: String!) {
+  sendEmailVerificationCode(email: $email)
+}
+
+mutation LogonByEmail(
+  $email: String!
+  $password: String!
+  $verificationCode: String!
+) {
+  logonByEmail(
+    email: $email
+    password: $password
+    verificationCode: $verificationCode
+  ) {
+    token
+    userId
+  }
+}
+
+mutation ResetPasswordByEmail(
+  $email: String!
+  $password: String!
+  $verificationCode: String!
+) {
+  resetPasswordByEmail(
+    email: $email
+    password: $password
+    verificationCode: $verificationCode
+  )
+}
