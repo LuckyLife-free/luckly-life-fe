@@ -15,9 +15,9 @@ import {OperationDefinitionNode} from 'graphql'
 import {createClient} from 'graphql-ws'
 import {PropsWithChildren} from 'react'
 
-const HOST = 'localhost:80'
-
 const GRAPHQL_SERVER = '/graphql'
+
+const HOST = (import.meta as any).env.VITE_HOST
 
 const httpLink = new HttpLink({uri: GRAPHQL_SERVER})
 
