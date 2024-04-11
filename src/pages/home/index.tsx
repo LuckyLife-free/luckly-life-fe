@@ -1,11 +1,16 @@
+import cover from '@/assets/cover.jpg'
 import {TitleBar, WithBottomBar, useTitleBar} from '@/components'
 import {useHomeArticleListQuery, useHomeUserListQuery} from '@/generated'
 import {Avatar, Box, Grid, Stack, Typography} from '@mui/material'
 import {format} from 'date-fns'
 
 export function HomePage() {
-  const {data: articleData} = useHomeArticleListQuery()
-  const {data: userData} = useHomeUserListQuery()
+  const {data: articleData} = useHomeArticleListQuery({
+    variables: {limit: 18},
+  })
+  const {data: userData} = useHomeUserListQuery({
+    variables: {limit: 9},
+  })
   const {variant, onScroll} = useTitleBar()
 
   return (
@@ -17,27 +22,25 @@ export function HomePage() {
           <Grid
             container
             direction="column"
-            maxHeight={300}
+            maxHeight={600}
             overflow="auto"
             spacing={2}
           >
             {articleData?.homeArticleList.map((d) => (
-              <Grid item xs={4} key={d.id}>
-                <Stack direction="row">
-                  <Avatar
-                    variant="rounded"
-                    src={d.cover?.url}
-                    sx={{width: 160, height: 90}}
-                  >
-                    {d.cover?.name}
-                  </Avatar>
-                  <Stack p={1} justifyContent="space-between">
-                    <Typography variant="subtitle1">{d.title}</Typography>
-                    <Typography color={(t) => t.palette.text.secondary}>
-                      {format(d.createTime, 'yyyy/MM/dd HH:mm')}
-                    </Typography>
-                  </Stack>
-                </Stack>
+              <Grid item key={d.id} width="calc(50vw - 16px)">
+                <Avatar
+                  variant="rounded"
+                  src={d.cover?.url || cover}
+                  sx={{width: '100%', height: 90}}
+                >
+                  {d.cover?.name}
+                </Avatar>
+                <Typography noWrap variant="subtitle1">
+                  {d.title}
+                </Typography>
+                <Typography color={(t) => t.palette.text.secondary}>
+                  {format(d.createTime, 'yyyy/MM/dd')}
+                </Typography>
               </Grid>
             ))}
           </Grid>
@@ -52,15 +55,20 @@ export function HomePage() {
             spacing={2}
           >
             {userData?.homeUserList.map((d) => (
-              <Grid item xs={6} key={d.id}>
-                <Avatar
-                  variant="rounded"
-                  src={d.avatar?.url}
-                  sx={{width: 100, height: 100}}
-                >
-                  {d.avatar?.name}
-                </Avatar>
-                <Stack p={1} alignItems="center">
+              <Grid
+                item
+                key={d.id}
+                width="calc(33vw - 8px)"
+                alignItems="center"
+              >
+                <Stack alignItems="center">
+                  <Avatar
+                    variant="rounded"
+                    src={d.avatar?.url || cover}
+                    sx={{width: 100, height: 100}}
+                  >
+                    {d.avatar?.name}
+                  </Avatar>
                   <Typography variant="subtitle1">{d.name}</Typography>
                   <Typography
                     noWrap
