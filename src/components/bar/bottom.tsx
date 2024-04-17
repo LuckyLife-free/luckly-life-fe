@@ -7,44 +7,46 @@ import {
   Search,
 } from '@mui/icons-material'
 import {BottomNavigation, BottomNavigationAction, Stack} from '@mui/material'
-import {PropsWithChildren, useEffect, useState} from 'react'
+import {PropsWithChildren, RefObject, useCallback, useState} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
-import {useEffectOnce} from 'react-use'
+import {useEffectOnce, useKeyPressEvent} from 'react-use'
 
-export function WithBottomBar(props: PropsWithChildren) {
-  const {children} = props
+type WithBottomBarProps = PropsWithChildren<{
+  contentRef: RefObject<HTMLElement>
+}>
+
+export function WithBottomBar(props: WithBottomBarProps) {
+  const {children, contentRef} = props
   const navigate = useNavigate()
   const location = useLocation()
   const [value, setValue] = useBottomTab()
   const [opacity, setOpacity] = useState(
     (import.meta as any).env.MODE === 'development' ? 0.05 : 1
   )
+  const scrollToTop = useCallback(() => {
+    contentRef.current?.scrollTo({top: 0})
+  }, [contentRef])
 
   useEffectOnce(() => {
-    if (location.pathname.match('/home')) {
+    if (location.pathname.startsWith('/home')) {
       setValue('home')
-    } else if (location.pathname.match('/publish')) {
+    } else if (location.pathname.startsWith('/publish')) {
       setValue('publish')
-    } else if (location.pathname.match('/search')) {
+    } else if (location.pathname.startsWith('/search')) {
       setValue('search')
     }
   })
 
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 's') {
-        setOpacity(opacity === 1 ? 0.05 : 1)
-      }
-    }
-    document.body.addEventListener('keydown', listener)
-    return () => {
-      document.body.removeEventListener('keydown', listener)
-    }
-  }, [opacity])
+  useKeyPressEvent(
+    (e) => e.ctrlKey && e.key === 's',
+    () => setOpacity(opacity === 1 ? 0.05 : 1)
+  )
 
   return (
     <Stack height="100vh" sx={{opacity}}>
-      {children}
+      <Stack flex={1} overflow="auto" ref={contentRef}>
+        {children}
+      </Stack>
       <BottomNavigation
         showLabels
         value={value}
@@ -56,6 +58,7 @@ export function WithBottomBar(props: PropsWithChildren) {
           value="home"
           icon={value === 'home' ? <Home /> : <HomeOutlined />}
           onClick={() => navigate('/home')}
+          onDoubleClick={scrollToTop}
         />
         <BottomNavigationAction
           label="发布"
@@ -68,6 +71,7 @@ export function WithBottomBar(props: PropsWithChildren) {
           value="search"
           icon={<Search />}
           onClick={() => navigate('/search')}
+          onDoubleClick={scrollToTop}
         />
       </BottomNavigation>
     </Stack>

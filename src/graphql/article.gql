@@ -38,3 +38,11 @@ query TagList($filter: TagListInput, $limit: Int, $offset: Int) {
     type
   }
 }
+
+query Tag($filter: TagInput!) {
+  tag(filter: $filter) {
+    id
+    name
+    type
+  }
+}

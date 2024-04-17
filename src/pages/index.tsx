@@ -24,6 +24,7 @@ export function RootEntry() {
       <Route path="/home" Component={HomePage} />
       <Route path="/publish" Component={Publish} />
       <Route path="/search" Component={SearchPage} />
+      <Route path="/search/home" Component={HomePage} />
     </Routes>
   )
 }

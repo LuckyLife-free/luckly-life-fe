@@ -44,6 +44,11 @@ export type SearchInput = {
   search?: InputMaybe<Scalars['String']>
 }
 
+export type TagInput = {
+  /** 标签ID */
+  id: Scalars['String']
+}
+
 export type TagListInput = {
   /** 标签类型 */
   type?: InputMaybe<TagType>
@@ -133,15 +138,16 @@ export type TagListQueryVariables = Exact<{
 
 export type TagListQuery = {
   __typename?: 'Query'
-  tagList: Array<{
-    __typename?: 'Tag'
-    createTime: number
-    id: string
-    isPreset: boolean
-    name: string
-    type: TagType
-    updateTime: number
-  }>
+  tagList: Array<{__typename?: 'Tag'; id: string; name: string; type: TagType}>
+}
+
+export type TagQueryVariables = Exact<{
+  filter: TagInput
+}>
+
+export type TagQuery = {
+  __typename?: 'Query'
+  tag?: {__typename?: 'Tag'; id: string; name: string; type: TagType} | null
 }
 
 export type LoginByEmailMutationVariables = Exact<{
@@ -424,12 +430,9 @@ export type HomeArticleListQueryResult = Apollo.QueryResult<
 export const TagListDocument = gql`
   query TagList($filter: TagListInput, $limit: Int, $offset: Int) {
     tagList(filter: $filter, limit: $limit, offset: $offset) {
-      createTime
       id
-      isPreset
       name
       type
-      updateTime
     }
   }
 `
@@ -476,6 +479,47 @@ export type TagListQueryResult = Apollo.QueryResult<
   TagListQuery,
   TagListQueryVariables
 >
+export const TagDocument = gql`
+  query Tag($filter: TagInput!) {
+    tag(filter: $filter) {
+      id
+      name
+      type
+    }
+  }
+`
+
+/**
+ * __useTagQuery__
+ *
+ * To run a query within a React component, call `useTagQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTagQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTagQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useTagQuery(
+  baseOptions: Apollo.QueryHookOptions<TagQuery, TagQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<TagQuery, TagQueryVariables>(TagDocument, options)
+}
+export function useTagLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TagQuery, TagQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<TagQuery, TagQueryVariables>(TagDocument, options)
+}
+export type TagQueryHookResult = ReturnType<typeof useTagQuery>
+export type TagLazyQueryHookResult = ReturnType<typeof useTagLazyQuery>
+export type TagQueryResult = Apollo.QueryResult<TagQuery, TagQueryVariables>
 export const LoginByEmailDocument = gql`
   mutation LoginByEmail($email: String!, $password: String!) {
     loginByEmail(email: $email, password: $password) {

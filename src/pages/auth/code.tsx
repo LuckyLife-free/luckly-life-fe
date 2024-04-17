@@ -1,28 +1,28 @@
 import {MyTextField} from '@/components'
 import {useSendEmailVerificationCodeMutation} from '@/generated'
 import {Button, Stack} from '@mui/material'
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useEffect} from 'react'
 import {useFormContext} from 'react-hook-form'
-import {useBoolean, useInterval} from 'react-use'
+import {useBoolean, useCounter, useInterval} from 'react-use'
 
 export function ValidationCodeField() {
   const [isRunning, setIsRunning] = useBoolean(false)
-  const [countDown, setCountDown] = useState(60)
-  const {watch} = useFormContext()
+  const [countDown, {inc, reset}] = useCounter(60, 60, 0)
   const [sendCode] = useSendEmailVerificationCodeMutation()
+  const {watch} = useFormContext()
   const onClickButton = useCallback(() => {
     setIsRunning(true)
     sendCode({variables: {email: watch('email')}})
   }, [sendCode, setIsRunning, watch])
 
-  useInterval(() => setCountDown((state) => state - 1), isRunning ? 1000 : null)
+  useInterval(inc, isRunning ? 1000 : null)
 
   useEffect(() => {
     if (countDown <= 0) {
       setIsRunning(false)
-      setCountDown(60)
+      reset()
     }
-  }, [countDown, setIsRunning])
+  }, [countDown, reset, setIsRunning])
 
   return (
     <Stack position="relative">

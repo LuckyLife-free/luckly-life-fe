@@ -1,26 +1,32 @@
 import {Divider, Stack, Typography} from '@mui/material'
-import {ReactNode, UIEvent, useCallback, useState} from 'react'
+import {ReactNode, useRef} from 'react'
+import {useScroll} from 'react-use'
 
 type TitleBarProps = {
-  variant: 'bar' | 'title'
+  titleHidden?: boolean
+  barHidden?: boolean
   children: ReactNode
 }
 
 export function useTitleBar() {
-  const [variant, setVariant] = useState<TitleBarProps['variant']>('title')
-  const onScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement
-    setVariant(target.scrollTop > 68 ? 'bar' : 'title')
-  }, [])
+  const ref = useRef<HTMLElement>(null)
+  const {y} = useScroll(ref)
 
-  return {variant, onScroll}
+  return {barHidden: y < 68, ref}
 }
 
-export function TitleBar({variant, children}: TitleBarProps) {
+export function TitleBar(props: TitleBarProps) {
+  const {barHidden, titleHidden, children} = props
+
   return (
     <Stack>
       <Stack paddingX={3} pt={3}>
-        <Typography variant="h4" fontWeight="bold" lineHeight={2}>
+        <Typography
+          display={titleHidden ? 'none' : 'block'}
+          variant="h4"
+          fontWeight="bold"
+          lineHeight={2}
+        >
           {children}
         </Typography>
       </Stack>
@@ -31,7 +37,7 @@ export function TitleBar({variant, children}: TitleBarProps) {
           position: 'absolute',
           transition: 'all .5s',
           bgcolor: t.palette.grey[50],
-          opacity: variant === 'title' ? 0 : 1,
+          opacity: barHidden ? 0 : 1,
           justifyItems: 'center',
           alignItems: 'center',
           width: '100%',

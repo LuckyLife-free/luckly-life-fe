@@ -161,6 +161,11 @@ type Query {
   myStarArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
 
   """
+  单个标签
+  """
+  tag(filter: TagInput!): Tag
+
+  """
   标签列表
   """
   tagList(filter: TagListInput, limit: Int, offset: Int): [Tag!]!
@@ -208,6 +213,13 @@ type Tag implements System {
   更新时间
   """
   updateTime: Date!
+}
+
+input TagInput {
+  """
+  标签ID
+  """
+  id: String!
 }
 
 input TagListInput {
