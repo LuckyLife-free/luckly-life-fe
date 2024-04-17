@@ -41,6 +41,18 @@ type Article implements System {
   updateTime: Date!
 }
 
+input ArticleListInput {
+  """
+  模糊搜索
+  """
+  search: String
+
+  """
+  标签类型
+  """
+  tags: [IdInput!]
+}
+
 type AuthInfo {
   token: String!
   userId: String!
@@ -138,7 +150,11 @@ type Query {
   """
   主页推送文章
   """
-  homeArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
+  homeArticleList(
+    filter: ArticleListInput
+    limit: Int
+    offset: Int
+  ): [Article!]!
 
   """
   主页推送用户
@@ -153,12 +169,16 @@ type Query {
   """
   我发布的文章
   """
-  myArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
+  myArticleList(filter: ArticleListInput, limit: Int, offset: Int): [Article!]!
 
   """
   我喜欢的文章
   """
-  myStarArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
+  myStarArticleList(
+    filter: ArticleListInput
+    limit: Int
+    offset: Int
+  ): [Article!]!
 
   """
   单个标签

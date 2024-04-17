@@ -16,7 +16,7 @@ export function HomePage() {
   const navigate = useNavigate()
   const tagId = useSearchParam('tagId')
   const {data: articleData} = useHomeArticleListQuery({
-    variables: {limit: 18},
+    variables: {limit: 18, filter: {tags: tagId ? [{id: tagId}] : null}},
   })
   const {data: userData} = useHomeUserListQuery({
     variables: {limit: 9},

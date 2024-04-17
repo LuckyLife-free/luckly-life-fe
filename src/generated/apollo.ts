@@ -22,6 +22,13 @@ export type Scalars = {
   Void: undefined
 }
 
+export type ArticleListInput = {
+  /** 模糊搜索 */
+  search?: InputMaybe<Scalars['String']>
+  /** 标签类型 */
+  tags?: InputMaybe<Array<IdInput>>
+}
+
 export type CreateArticleInput = {
   /** 文章内容-序列化字符串 */
   content: Scalars['String']
@@ -109,7 +116,7 @@ export type DeleteArticleMutation = {
 }
 
 export type HomeArticleListQueryVariables = Exact<{
-  filter?: InputMaybe<SearchInput>
+  filter?: InputMaybe<ArticleListInput>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
 }>
@@ -353,7 +360,7 @@ export type DeleteArticleMutationOptions = Apollo.BaseMutationOptions<
   DeleteArticleMutationVariables
 >
 export const HomeArticleListDocument = gql`
-  query HomeArticleList($filter: SearchInput, $limit: Int, $offset: Int) {
+  query HomeArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
     homeArticleList(filter: $filter, limit: $limit, offset: $offset) {
       author {
         name
