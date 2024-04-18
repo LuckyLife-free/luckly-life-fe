@@ -22,11 +22,35 @@ export type Scalars = {
   Void: undefined
 }
 
+export type ActivityListInput = {
+  /** 模糊搜索 */
+  search?: InputMaybe<Scalars['String']>
+  /** 标签类型 */
+  tag?: InputMaybe<IdInput>
+}
+
 export type ArticleListInput = {
+  /** 最新文章 */
+  latest?: InputMaybe<Scalars['Boolean']>
   /** 模糊搜索 */
   search?: InputMaybe<Scalars['String']>
   /** 标签类型 */
   tags?: InputMaybe<Array<IdInput>>
+}
+
+export type CreateActivityInput = {
+  /** 征文封面 */
+  cover?: InputMaybe<IdInput>
+  /** 征文简介 */
+  description: Scalars['String']
+  /** 活动结束时间 */
+  endTime: Scalars['Date']
+  /** 活动开始时间 */
+  startTime: Scalars['Date']
+  /** 标签分类 */
+  tag: IdInput
+  /** 征文标题 */
+  title: Scalars['String']
 }
 
 export type CreateArticleInput = {
@@ -65,6 +89,22 @@ export type TagType =
   /** 文章 */
   'ARTICLE'
 
+export type UpdateActivityInput = {
+  /** 征文封面 */
+  cover?: InputMaybe<IdInput>
+  /** 征文简介 */
+  description: Scalars['String']
+  /** 活动结束时间 */
+  endTime: Scalars['Date']
+  id: Scalars['String']
+  /** 活动开始时间 */
+  startTime: Scalars['Date']
+  /** 标签分类 */
+  tag: IdInput
+  /** 征文标题 */
+  title: Scalars['String']
+}
+
 export type UpdateArticleInput = {
   /** 文章内容-序列化字符串 */
   content: Scalars['String']
@@ -86,6 +126,26 @@ export type UpdateMeInput = {
   name?: InputMaybe<Scalars['String']>
   /** 个性签名 */
   signature?: InputMaybe<Scalars['String']>
+}
+
+export type ActivityListQueryVariables = Exact<{
+  filter?: InputMaybe<ActivityListInput>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+}>
+
+export type ActivityListQuery = {
+  __typename?: 'Query'
+  activityList: Array<{
+    __typename?: 'Activity'
+    description: string
+    endTime: number
+    id: string
+    startTime: number
+    title: string
+    cover?: {__typename?: 'Image'; name: string; url: string} | null
+    tag?: {__typename?: 'Tag'; name: string} | null
+  }>
 }
 
 export type CreateArticleMutationVariables = Exact<{
@@ -133,7 +193,7 @@ export type HomeArticleListQuery = {
     updateTime: number
     author: {__typename?: 'User'; name: string}
     cover?: {__typename?: 'Image'; name: string; url: string} | null
-    tags: Array<{__typename?: 'Tag'; name: string}>
+    tags: Array<{__typename?: 'Tag'; name: string} | null>
   }>
 }
 
@@ -215,6 +275,77 @@ export type HomeUserListQuery = {
   }>
 }
 
+export const ActivityListDocument = gql`
+  query ActivityList($filter: ActivityListInput, $limit: Int, $offset: Int) {
+    activityList(filter: $filter, limit: $limit, offset: $offset) {
+      cover {
+        name
+        url
+      }
+      description
+      endTime
+      id
+      startTime
+      tag {
+        name
+      }
+      title
+    }
+  }
+`
+
+/**
+ * __useActivityListQuery__
+ *
+ * To run a query within a React component, call `useActivityListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActivityListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActivityListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useActivityListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ActivityListQuery,
+    ActivityListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<ActivityListQuery, ActivityListQueryVariables>(
+    ActivityListDocument,
+    options
+  )
+}
+export function useActivityListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ActivityListQuery,
+    ActivityListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<ActivityListQuery, ActivityListQueryVariables>(
+    ActivityListDocument,
+    options
+  )
+}
+export type ActivityListQueryHookResult = ReturnType<
+  typeof useActivityListQuery
+>
+export type ActivityListLazyQueryHookResult = ReturnType<
+  typeof useActivityListLazyQuery
+>
+export type ActivityListQueryResult = Apollo.QueryResult<
+  ActivityListQuery,
+  ActivityListQueryVariables
+>
 export const CreateArticleDocument = gql`
   mutation CreateArticle($input: CreateArticleInput!) {
     createArticle(input: $input)

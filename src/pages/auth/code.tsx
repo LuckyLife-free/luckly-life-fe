@@ -39,7 +39,7 @@ export function ValidationCodeField() {
         variant="text"
         disabled={isRunning}
         onClick={onClickButton}
-        sx={{position: 'absolute', right: 16, height: '100%'}}
+        sx={{position: 'absolute', top: 4, right: 16, height: '100%'}}
       >
         {isRunning ? `重新获取(${countDown}s)` : '获取验证码'}
       </Button>

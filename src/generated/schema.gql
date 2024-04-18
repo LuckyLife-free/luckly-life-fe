@@ -1,3 +1,58 @@
+type Activity implements System {
+  """
+  征文封面
+  """
+  cover: Image
+
+  """
+  创建时间
+  """
+  createTime: Date!
+
+  """
+  征文简介
+  """
+  description: String!
+
+  """
+  活动结束时间
+  """
+  endTime: Date!
+  id: String!
+
+  """
+  活动开始时间
+  """
+  startTime: Date!
+
+  """
+  标签分类
+  """
+  tag: Tag
+
+  """
+  征文标题
+  """
+  title: String!
+
+  """
+  更新时间
+  """
+  updateTime: Date!
+}
+
+input ActivityListInput {
+  """
+  模糊搜索
+  """
+  search: String
+
+  """
+  标签类型
+  """
+  tag: IdInput
+}
+
 type Article implements System {
   """
   文章作者
@@ -28,7 +83,7 @@ type Article implements System {
   """
   标签分类
   """
-  tags: [Tag!]!
+  tags: [Tag]!
 
   """
   文章标题
@@ -43,6 +98,11 @@ type Article implements System {
 
 input ArticleListInput {
   """
+  最新文章
+  """
+  latest: Boolean
+
+  """
   模糊搜索
   """
   search: String
@@ -56,6 +116,38 @@ input ArticleListInput {
 type AuthInfo {
   token: String!
   userId: String!
+}
+
+input CreateActivityInput {
+  """
+  征文封面
+  """
+  cover: IdInput
+
+  """
+  征文简介
+  """
+  description: String!
+
+  """
+  活动结束时间
+  """
+  endTime: Date!
+
+  """
+  活动开始时间
+  """
+  startTime: Date!
+
+  """
+  标签分类
+  """
+  tag: IdInput!
+
+  """
+  征文标题
+  """
+  title: String!
 }
 
 input CreateArticleInput {
@@ -101,6 +193,11 @@ type Image {
 
 type Mutation {
   """
+  新建征文帖子
+  """
+  createActivity(input: CreateActivityInput!): Boolean!
+
+  """
   新建文章帖子
   """
   createArticle(input: CreateArticleInput!): Boolean!
@@ -134,6 +231,11 @@ type Mutation {
   unStarArticle(input: IdInput!): Boolean!
 
   """
+  更新征文帖子
+  """
+  updateActivity(input: UpdateActivityInput!): Boolean!
+
+  """
   更新文章帖子
   """
   updateArticle(input: UpdateArticleInput!): Boolean!
@@ -145,6 +247,10 @@ type Mutation {
 }
 
 type Query {
+  """
+  征文列表
+  """
+  activityList(filter: ActivityListInput, limit: Int, offset: Int): [Activity!]!
   hello: String!
 
   """
@@ -169,16 +275,12 @@ type Query {
   """
   我发布的文章
   """
-  myArticleList(filter: ArticleListInput, limit: Int, offset: Int): [Article!]!
+  myArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
 
   """
   我喜欢的文章
   """
-  myStarArticleList(
-    filter: ArticleListInput
-    limit: Int
-    offset: Int
-  ): [Article!]!
+  myStarArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
 
   """
   单个标签
@@ -254,6 +356,39 @@ enum TagType {
   文章
   """
   ARTICLE
+}
+
+input UpdateActivityInput {
+  """
+  征文封面
+  """
+  cover: IdInput
+
+  """
+  征文简介
+  """
+  description: String!
+
+  """
+  活动结束时间
+  """
+  endTime: Date!
+  id: String!
+
+  """
+  活动开始时间
+  """
+  startTime: Date!
+
+  """
+  标签分类
+  """
+  tag: IdInput!
+
+  """
+  征文标题
+  """
+  title: String!
 }
 
 input UpdateArticleInput {
