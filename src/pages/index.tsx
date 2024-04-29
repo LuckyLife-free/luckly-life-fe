@@ -13,7 +13,7 @@ export function RootEntry() {
   const navigate = useNavigate()
 
   useShallowCompareEffect(() => {
-    navigate(token ? '/home' : '/login')
+    !token && navigate('/login')
   }, [{token}])
 
   return (

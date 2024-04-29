@@ -26,6 +26,7 @@ export function Reset() {
       })
       if (result.data?.loginByEmail) {
         setToken(result.data.loginByEmail.token)
+        window.location.reload()
       }
     }
   }

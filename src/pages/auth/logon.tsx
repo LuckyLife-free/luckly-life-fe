@@ -20,6 +20,7 @@ export function Logon() {
     })
     if (result.data?.logonByEmail) {
       setToken(result.data.logonByEmail.token)
+      window.location.reload()
     }
   }
 

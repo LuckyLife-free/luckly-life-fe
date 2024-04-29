@@ -1,13 +1,15 @@
-import {useState} from 'react'
-import {useLocalStorage} from 'react-use'
-import {createSharedData} from './common'
+import {createGlobalState, useLocalStorage} from 'react-use'
 
-export const useToken = createSharedData(function () {
+export const useToken = function () {
   return useLocalStorage<Maybe<string>>('AUTH_TOKEN')
-})
+}
 
-export const useBottomTab = createSharedData<'home' | 'publish' | 'search'>(
-  function (initialValue) {
-    return useState(initialValue ?? 'home')
-  }
+export const useRecentSearch = function () {
+  return useLocalStorage<Maybe<string[]>>('RECENT_SEARCH', [])
+}
+
+export const useBottomTab = createGlobalState<'home' | 'publish' | 'search'>(
+  'home'
 )
+
+export const useSearch = createGlobalState<string>('')

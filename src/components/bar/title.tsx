@@ -1,8 +1,9 @@
 import {Divider, Stack, Typography} from '@mui/material'
-import {ReactNode, useRef} from 'react'
+import {ReactNode, RefObject, useRef} from 'react'
 import {useScroll} from 'react-use'
 
 type TitleBarProps = {
+  ref?: RefObject<HTMLElement>
   titleHidden?: boolean
   barHidden?: boolean
   children: ReactNode
@@ -16,10 +17,10 @@ export function useTitleBar() {
 }
 
 export function TitleBar(props: TitleBarProps) {
-  const {barHidden, titleHidden, children} = props
+  const {ref, barHidden, titleHidden, children} = props
 
   return (
-    <Stack>
+    <Stack ref={ref}>
       <Stack paddingX={3} pt={3}>
         <Typography
           display={titleHidden ? 'none' : 'block'}

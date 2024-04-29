@@ -49,6 +49,7 @@ function useClient() {
         )
       ) {
         setToken(null)
+        window.location.reload()
       }
     }
   })
