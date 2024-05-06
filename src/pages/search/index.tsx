@@ -1,5 +1,5 @@
 import cover from '@/assets/cover.jpg'
-import {TitleBar, useTitleBar} from '@/components'
+import {TitleBar, WithBottomBar, useTitleBar} from '@/components'
 import {useTagListQuery} from '@/generated'
 import {useRecentSearch} from '@/helpers'
 import {Avatar, Box, Grid, Stack, Typography} from '@mui/material'
@@ -16,7 +16,7 @@ export function SearchPage() {
   const navigate = useNavigate()
 
   return (
-    <Stack ref={contentRef}>
+    <WithBottomBar contentRef={contentRef}>
       <TitleBar barHidden={barHidden}>
         <Stack position="relative">
           <SearchInput onFocusedChange={setFocused}></SearchInput>
@@ -41,7 +41,7 @@ export function SearchPage() {
           )}
         </Stack>
       </TitleBar>
-      <Box padding={3} ref={titleRef} sx={{display: focused ? 'none' : 'flex'}}>
+      <Box hidden={focused} padding={3} ref={titleRef}>
         <Grid container overflow="auto" spacing={2}>
           {tagData?.tagList.map((d) => (
             <Grid item xs={6} key={d.id}>
@@ -77,6 +77,6 @@ export function SearchPage() {
           ))}
         </Grid>
       </Box>
-    </Stack>
+    </WithBottomBar>
   )
 }

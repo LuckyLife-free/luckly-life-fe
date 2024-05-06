@@ -1,5 +1,5 @@
 import {useToken} from '@/helpers'
-import {Route, Routes, useNavigate} from 'react-router-dom'
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom'
 import {useShallowCompareEffect} from 'react-use'
 import {Login} from './auth/login'
 import {Logon} from './auth/logon'
@@ -10,10 +10,16 @@ import {SearchPage} from './search'
 
 export function RootEntry() {
   const [token] = useToken()
+  const {pathname} = useLocation()
   const navigate = useNavigate()
+  const authPath = ['/login', '/logon', '/reset']
 
   useShallowCompareEffect(() => {
-    !token && navigate('/login')
+    if (!token) {
+      navigate('/login')
+    } else if (authPath.some((path) => pathname.startsWith(path))) {
+      navigate('/home')
+    }
   }, [{token}])
 
   return (

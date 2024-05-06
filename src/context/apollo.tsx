@@ -48,8 +48,8 @@ function useClient() {
           ({extensions}) => extensions.code === 'AUTHENTICATION_ERROR'
         )
       ) {
-        setToken(null)
-        window.location.reload()
+        setToken(undefined)
+        window.location.pathname = '/'
       }
     }
   })
