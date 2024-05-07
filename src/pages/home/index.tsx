@@ -6,7 +6,7 @@ import {
   useTagQuery,
   useUserListQuery,
 } from '@/generated'
-import {ChevronLeftRounded} from '@mui/icons-material'
+import {ArrowBackRounded} from '@mui/icons-material'
 import {Avatar, IconButton, Stack, Typography} from '@mui/material'
 import {format} from 'date-fns'
 import {useNavigate} from 'react-router-dom'
@@ -43,7 +43,7 @@ export function HomePage() {
         <TitleBar titleHidden>
           <Stack direction="row" alignItems="center" width="100vw">
             <IconButton onClick={() => navigate(-1)}>
-              <ChevronLeftRounded />
+              <ArrowBackRounded />
             </IconButton>
             {tagData?.tag?.name}
           </Stack>
@@ -58,7 +58,7 @@ export function HomePage() {
         row={3}
       >
         {(d) => (
-          <Stack>
+          <Stack onClick={() => navigate(`/detail/article?id=${d.id}`)}>
             <Avatar
               variant="rounded"
               src={d.cover?.url || cover}
@@ -85,7 +85,10 @@ export function HomePage() {
         row={1}
       >
         {(d) => (
-          <Stack alignItems="center">
+          <Stack
+            alignItems="center"
+            onClick={() => navigate(`/detail/detail?id=${d.id}`)}
+          >
             <Avatar
               variant="rounded"
               src={d.avatar?.url || cover}
@@ -114,7 +117,7 @@ export function HomePage() {
         row={3}
       >
         {(d) => (
-          <Stack>
+          <Stack onClick={() => navigate(`/detail/article?id=${d.id}`)}>
             <Avatar
               variant="rounded"
               src={d.cover?.url || cover}

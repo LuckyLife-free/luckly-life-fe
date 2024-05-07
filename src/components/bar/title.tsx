@@ -1,5 +1,5 @@
-import {Divider, Stack, Typography} from '@mui/material'
-import {ReactNode, RefObject, useRef} from 'react'
+import {Box, Divider, Stack, Typography} from '@mui/material'
+import {ReactElement, ReactNode, RefObject, useRef} from 'react'
 import {useScroll} from 'react-use'
 
 type TitleBarProps = {
@@ -48,6 +48,51 @@ export function TitleBar(props: TitleBarProps) {
           {children}
         </Typography>
         <Divider flexItem />
+      </Stack>
+    </Stack>
+  )
+}
+
+type WithTitleBarProps = {
+  title?: string
+  bgcolor?: string
+  barLeft?: ReactElement
+  barRight?: ReactElement
+  children: ReactNode
+}
+
+export function WithTitleBar(props: WithTitleBarProps) {
+  const {barLeft, barRight, title, bgcolor, children} = props
+
+  return (
+    <Stack height="100vh">
+      <Stack
+        sx={(t) => ({
+          top: 0,
+          zIndex: 1,
+          position: 'absolute',
+          transition: 'all .5s',
+          bgcolor: bgcolor ?? t.palette.grey[50],
+          justifyItems: 'center',
+          alignItems: 'center',
+        })}
+      >
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          width="100vw"
+        >
+          {barLeft || <Box />}
+          <Typography flex={1} variant="subtitle2" fontWeight="bold">
+            {title}
+          </Typography>
+          {barRight || <Box />}
+        </Stack>
+        <Divider flexItem />
+      </Stack>
+      <Stack pt={5} flex={1} overflow="auto">
+        {children}
       </Stack>
     </Stack>
   )

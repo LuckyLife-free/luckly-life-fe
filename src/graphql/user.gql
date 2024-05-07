@@ -1,3 +1,15 @@
+query User($id: String!) {
+  user(id: $id) {
+    id
+    avatar {
+      name
+      url
+    }
+    name
+    signature
+  }
+}
+
 query UserList($filter: SearchInput, $limit: Int, $offset: Int) {
   userList(filter: $filter, limit: $limit, offset: $offset) {
     id

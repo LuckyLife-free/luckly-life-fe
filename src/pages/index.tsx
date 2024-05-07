@@ -4,10 +4,12 @@ import {useShallowCompareEffect} from 'react-use'
 import {Login} from './auth/login'
 import {Logon} from './auth/logon'
 import {Reset} from './auth/reset'
+import {ArticleDetail} from './detail/article'
+import {UserDetail} from './detail/user'
 import {HomePage} from './home'
 import {Publish} from './publish'
 import {SearchPage} from './search'
-import {SearchResultPage} from './search/search'
+import {SearchResult} from './search/search'
 
 export function RootEntry() {
   const [token] = useToken()
@@ -35,7 +37,9 @@ export function RootEntry() {
       <Route path="/publish" Component={Publish} />
       <Route path="/search" Component={SearchPage} />
       <Route path="/search/home" Component={HomePage} />
-      <Route path="/search/result" Component={SearchResultPage} />
+      <Route path="/search/result" Component={SearchResult} />
+      <Route path="/detail/article" Component={ArticleDetail} />
+      <Route path="/detail/user" Component={UserDetail} />
     </Routes>
   )
 }

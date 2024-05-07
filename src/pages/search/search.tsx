@@ -1,11 +1,11 @@
 import {MyTabs} from '@/components/tab'
 import {useRecentSearch, useSearch} from '@/helpers'
-import {ChevronLeftRounded} from '@mui/icons-material'
+import {ArrowBackRounded} from '@mui/icons-material'
 import {Box, IconButton, Stack, Typography} from '@mui/material'
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {ActivityList} from './activity-list'
-import {ArticleList} from './article-list'
+import {ActivityList} from '../list/activity'
+import {ArticleList} from '../list/article'
 import {SearchInput} from './input'
 
 const TabData = [
@@ -14,7 +14,7 @@ const TabData = [
   {key: '3', label: '征文'},
 ]
 
-export function SearchResultPage() {
+export function SearchResult() {
   const [focused, setFocused] = useState(true)
   const [search, setSearch] = useSearch()
   const [searches] = useRecentSearch()
@@ -25,7 +25,7 @@ export function SearchResultPage() {
       <Stack position="relative">
         <Stack direction="row" alignItems="center">
           <IconButton size="small" onClick={() => navigate(-1)}>
-            <ChevronLeftRounded />
+            <ArrowBackRounded />
           </IconButton>
           <SearchInput onFocusedChange={setFocused} />
         </Stack>
@@ -60,11 +60,11 @@ export function SearchResultPage() {
       <Box hidden={focused} pt={1}>
         <MyTabs tabs={TabData}>
           {({tab}) => (
-            <>
-              <ArticleList visible={tab === '1'} search={search} latest />
-              <ArticleList visible={tab === '2'} search={search} />
-              <ActivityList visible={tab === '3'} search={search} />
-            </>
+            <Stack mt={2}>
+              <ArticleList hidden={tab !== '1'} search={search} latest />
+              <ArticleList hidden={tab !== '2'} search={search} />
+              <ActivityList hidden={tab !== '3'} search={search} />
+            </Stack>
           )}
         </MyTabs>
       </Box>

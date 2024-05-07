@@ -98,6 +98,11 @@ type Article implements System {
 
 input ArticleListInput {
   """
+  作者
+  """
+  authors: [IdInput!]
+
+  """
   最新文章
   """
   latest: Boolean
@@ -253,7 +258,12 @@ type Query {
   activityList(filter: ActivityListInput, limit: Int, offset: Int): [Activity!]!
 
   """
-  主页推送文章
+  单个文章
+  """
+  article(id: String!): Article
+
+  """
+  文章列表
   """
   articleList(filter: ArticleListInput, limit: Int, offset: Int): [Article!]!
   hello: String!
@@ -284,7 +294,12 @@ type Query {
   tagList(filter: TagListInput, limit: Int, offset: Int): [Tag!]!
 
   """
-  主页推送用户
+  单个用户
+  """
+  user(id: String!): User
+
+  """
+  用户列表
   """
   userList(filter: SearchInput, limit: Int, offset: Int): [User!]!
 }

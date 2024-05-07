@@ -10,12 +10,28 @@ mutation DeleteArticle($input: IdInput!) {
   deleteArticle(input: $input)
 }
 
+query Article($id: String!) {
+  article(id: $id) {
+    author {
+      id
+      name
+      avatar {
+        url
+      }
+    }
+    content
+    createTime
+    id
+    title
+    updateTime
+  }
+}
+
 query ArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
   articleList(filter: $filter, limit: $limit, offset: $offset) {
     author {
       name
     }
-    content
     cover {
       name
       url

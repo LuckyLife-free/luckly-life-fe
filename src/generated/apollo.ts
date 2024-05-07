@@ -30,6 +30,8 @@ export type ActivityListInput = {
 }
 
 export type ArticleListInput = {
+  /** 作者 */
+  authors?: InputMaybe<Array<IdInput>>
   /** 最新文章 */
   latest?: InputMaybe<Scalars['Boolean']>
   /** 模糊搜索 */
@@ -175,6 +177,28 @@ export type DeleteArticleMutation = {
   deleteArticle: boolean
 }
 
+export type ArticleQueryVariables = Exact<{
+  id: Scalars['String']
+}>
+
+export type ArticleQuery = {
+  __typename?: 'Query'
+  article?: {
+    __typename?: 'Article'
+    content: string
+    createTime: number
+    id: string
+    title: string
+    updateTime: number
+    author: {
+      __typename?: 'User'
+      id: string
+      name: string
+      avatar?: {__typename?: 'Image'; url: string} | null
+    }
+  } | null
+}
+
 export type ArticleListQueryVariables = Exact<{
   filter?: InputMaybe<ArticleListInput>
   limit?: InputMaybe<Scalars['Int']>
@@ -185,7 +209,6 @@ export type ArticleListQuery = {
   __typename?: 'Query'
   articleList: Array<{
     __typename?: 'Article'
-    content: string
     createTime: number
     id: string
     summary: string
@@ -256,6 +279,21 @@ export type ResetPasswordByEmailMutationVariables = Exact<{
 export type ResetPasswordByEmailMutation = {
   __typename?: 'Mutation'
   resetPasswordByEmail: boolean
+}
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['String']
+}>
+
+export type UserQuery = {
+  __typename?: 'Query'
+  user?: {
+    __typename?: 'User'
+    id: string
+    name: string
+    signature?: string | null
+    avatar?: {__typename?: 'Image'; name: string; url: string} | null
+  } | null
 }
 
 export type UserListQueryVariables = Exact<{
@@ -490,13 +528,71 @@ export type DeleteArticleMutationOptions = Apollo.BaseMutationOptions<
   DeleteArticleMutation,
   DeleteArticleMutationVariables
 >
+export const ArticleDocument = gql`
+  query Article($id: String!) {
+    article(id: $id) {
+      author {
+        id
+        name
+        avatar {
+          url
+        }
+      }
+      content
+      createTime
+      id
+      title
+      updateTime
+    }
+  }
+`
+
+/**
+ * __useArticleQuery__
+ *
+ * To run a query within a React component, call `useArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArticleQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useArticleQuery(
+  baseOptions: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<ArticleQuery, ArticleQueryVariables>(
+    ArticleDocument,
+    options
+  )
+}
+export function useArticleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ArticleQuery, ArticleQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<ArticleQuery, ArticleQueryVariables>(
+    ArticleDocument,
+    options
+  )
+}
+export type ArticleQueryHookResult = ReturnType<typeof useArticleQuery>
+export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>
+export type ArticleQueryResult = Apollo.QueryResult<
+  ArticleQuery,
+  ArticleQueryVariables
+>
 export const ArticleListDocument = gql`
   query ArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
     articleList(filter: $filter, limit: $limit, offset: $offset) {
       author {
         name
       }
-      content
       cover {
         name
         url
@@ -876,6 +972,54 @@ export type ResetPasswordByEmailMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordByEmailMutation,
   ResetPasswordByEmailMutationVariables
 >
+export const UserDocument = gql`
+  query User($id: String!) {
+    user(id: $id) {
+      id
+      avatar {
+        name
+        url
+      }
+      name
+      signature
+    }
+  }
+`
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(
+  baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options)
+}
+export function useUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(
+    UserDocument,
+    options
+  )
+}
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>
 export const UserListDocument = gql`
   query UserList($filter: SearchInput, $limit: Int, $offset: Int) {
     userList(filter: $filter, limit: $limit, offset: $offset) {

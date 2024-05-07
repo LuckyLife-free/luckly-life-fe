@@ -22,7 +22,7 @@ const HOST = (import.meta as any).env.VITE_HOST
 const httpLink = new HttpLink({uri: GRAPHQL_SERVER})
 
 function useClient() {
-  const [token, setToken] = useToken()
+  const [token, , clear] = useToken()
   const wsLink = new GraphQLWsLink(
     createClient({
       url: `ws://${HOST}${GRAPHQL_SERVER}`,
@@ -48,7 +48,7 @@ function useClient() {
           ({extensions}) => extensions.code === 'AUTHENTICATION_ERROR'
         )
       ) {
-        setToken(undefined)
+        clear()
         window.location.pathname = '/'
       }
     }

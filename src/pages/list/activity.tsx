@@ -1,16 +1,17 @@
 import cover from '@/assets/cover.jpg'
 import {AsyncStatus} from '@/components/status'
 import {ActivityListInput, useActivityListQuery} from '@/generated'
-import {Stack, Typography} from '@mui/material'
+import {Stack, SxProps, Typography} from '@mui/material'
 import {format} from 'date-fns'
 import {useEffect, useState} from 'react'
 
 type ActivityListProps = ActivityListInput & {
-  visible: boolean
+  hidden?: boolean
+  sx?: SxProps
 }
 
 export function ActivityList(props: ActivityListProps) {
-  const {visible, ...input} = props
+  const {hidden, sx, ...input} = props
   const [skip, setSkip] = useState(true)
   const {data: activityData, loading} = useActivityListQuery({
     variables: {filter: input, limit: 18},
@@ -18,16 +19,16 @@ export function ActivityList(props: ActivityListProps) {
   })
 
   useEffect(() => {
-    visible && input.search && setSkip(false)
-  }, [input.search, visible])
+    !hidden && setSkip(false)
+  }, [input.search, hidden])
 
   return (
     <AsyncStatus
+      hidden={hidden}
       loading={loading}
-      hidden={!visible}
       empty={activityData?.activityList.length === 0}
     >
-      <Stack mt={2} spacing={2}>
+      <Stack spacing={2} sx={sx}>
         {activityData?.activityList.map((d) => (
           <Stack
             key={d.id}

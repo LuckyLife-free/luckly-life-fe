@@ -1,17 +1,20 @@
 import cover from '@/assets/cover.jpg'
 import {AsyncStatus} from '@/components/status'
 import {ArticleListInput, useArticleListQuery} from '@/generated'
-import {ChevronRightRounded} from '@mui/icons-material'
-import {Avatar, IconButton, Stack, Typography} from '@mui/material'
+import {ChevronRightOutlined} from '@mui/icons-material'
+import {Avatar, IconButton, Stack, SxProps, Typography} from '@mui/material'
 import {format} from 'date-fns'
 import {useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 
 type ArticleListProps = ArticleListInput & {
-  visible: boolean
+  hidden?: boolean
+  sx?: SxProps
 }
 
 export function ArticleList(props: ArticleListProps) {
-  const {visible, ...input} = props
+  const {hidden, sx, ...input} = props
+  const navigate = useNavigate()
   const [skip, setSkip] = useState(true)
   const {data: articleData, loading} = useArticleListQuery({
     variables: {filter: input, limit: 18},
@@ -19,18 +22,25 @@ export function ArticleList(props: ArticleListProps) {
   })
 
   useEffect(() => {
-    visible && input.search && setSkip(false)
-  }, [input.search, visible])
+    !hidden && setSkip(false)
+  }, [input.search, hidden])
 
   return (
     <AsyncStatus
+      hidden={hidden}
       loading={loading}
-      hidden={!visible}
       empty={articleData?.articleList.length === 0}
     >
-      <Stack mt={2} spacing={2}>
+      <Stack spacing={2} sx={sx}>
         {articleData?.articleList.map((d) => (
-          <Stack key={d.id} direction="row" spacing={2}>
+          <Stack
+            key={d.id}
+            direction="row"
+            onClick={() => navigate(`/detail/article?id=${d.id}`)}
+            bgcolor={(t) => t.palette.grey[50]}
+            borderRadius={1}
+            overflow="hidden"
+          >
             <Avatar
               variant="rounded"
               src={d.cover?.url || cover}
@@ -38,7 +48,12 @@ export function ArticleList(props: ArticleListProps) {
             >
               {d.cover?.name}
             </Avatar>
-            <Stack flex={1} direction="row" justifyContent="space-between">
+            <Stack
+              p={1}
+              flex={1}
+              direction="row"
+              justifyContent="space-between"
+            >
               <Stack spacing={1}>
                 <Typography
                   variant="caption"
@@ -48,8 +63,8 @@ export function ArticleList(props: ArticleListProps) {
                 </Typography>
                 <Typography variant="subtitle2">{d.title}</Typography>
               </Stack>
-              <IconButton>
-                <ChevronRightRounded />
+              <IconButton size="small">
+                <ChevronRightOutlined />
               </IconButton>
             </Stack>
           </Stack>
