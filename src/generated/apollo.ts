@@ -175,15 +175,15 @@ export type DeleteArticleMutation = {
   deleteArticle: boolean
 }
 
-export type HomeArticleListQueryVariables = Exact<{
+export type ArticleListQueryVariables = Exact<{
   filter?: InputMaybe<ArticleListInput>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
 }>
 
-export type HomeArticleListQuery = {
+export type ArticleListQuery = {
   __typename?: 'Query'
-  homeArticleList: Array<{
+  articleList: Array<{
     __typename?: 'Article'
     content: string
     createTime: number
@@ -258,15 +258,15 @@ export type ResetPasswordByEmailMutation = {
   resetPasswordByEmail: boolean
 }
 
-export type HomeUserListQueryVariables = Exact<{
+export type UserListQueryVariables = Exact<{
   filter?: InputMaybe<SearchInput>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
 }>
 
-export type HomeUserListQuery = {
+export type UserListQuery = {
   __typename?: 'Query'
-  homeUserList: Array<{
+  userList: Array<{
     __typename?: 'User'
     id: string
     name: string
@@ -490,9 +490,9 @@ export type DeleteArticleMutationOptions = Apollo.BaseMutationOptions<
   DeleteArticleMutation,
   DeleteArticleMutationVariables
 >
-export const HomeArticleListDocument = gql`
-  query HomeArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
-    homeArticleList(filter: $filter, limit: $limit, offset: $offset) {
+export const ArticleListDocument = gql`
+  query ArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
+    articleList(filter: $filter, limit: $limit, offset: $offset) {
       author {
         name
       }
@@ -514,16 +514,16 @@ export const HomeArticleListDocument = gql`
 `
 
 /**
- * __useHomeArticleListQuery__
+ * __useArticleListQuery__
  *
- * To run a query within a React component, call `useHomeArticleListQuery` and pass it any options that fit your needs.
- * When your component renders, `useHomeArticleListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useArticleListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useHomeArticleListQuery({
+ * const { data, loading, error } = useArticleListQuery({
  *   variables: {
  *      filter: // value for 'filter'
  *      limit: // value for 'limit'
@@ -531,39 +531,37 @@ export const HomeArticleListDocument = gql`
  *   },
  * });
  */
-export function useHomeArticleListQuery(
+export function useArticleListQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    HomeArticleListQuery,
-    HomeArticleListQueryVariables
+    ArticleListQuery,
+    ArticleListQueryVariables
   >
 ) {
   const options = {...defaultOptions, ...baseOptions}
-  return Apollo.useQuery<HomeArticleListQuery, HomeArticleListQueryVariables>(
-    HomeArticleListDocument,
+  return Apollo.useQuery<ArticleListQuery, ArticleListQueryVariables>(
+    ArticleListDocument,
     options
   )
 }
-export function useHomeArticleListLazyQuery(
+export function useArticleListLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    HomeArticleListQuery,
-    HomeArticleListQueryVariables
+    ArticleListQuery,
+    ArticleListQueryVariables
   >
 ) {
   const options = {...defaultOptions, ...baseOptions}
-  return Apollo.useLazyQuery<
-    HomeArticleListQuery,
-    HomeArticleListQueryVariables
-  >(HomeArticleListDocument, options)
+  return Apollo.useLazyQuery<ArticleListQuery, ArticleListQueryVariables>(
+    ArticleListDocument,
+    options
+  )
 }
-export type HomeArticleListQueryHookResult = ReturnType<
-  typeof useHomeArticleListQuery
+export type ArticleListQueryHookResult = ReturnType<typeof useArticleListQuery>
+export type ArticleListLazyQueryHookResult = ReturnType<
+  typeof useArticleListLazyQuery
 >
-export type HomeArticleListLazyQueryHookResult = ReturnType<
-  typeof useHomeArticleListLazyQuery
->
-export type HomeArticleListQueryResult = Apollo.QueryResult<
-  HomeArticleListQuery,
-  HomeArticleListQueryVariables
+export type ArticleListQueryResult = Apollo.QueryResult<
+  ArticleListQuery,
+  ArticleListQueryVariables
 >
 export const TagListDocument = gql`
   query TagList($filter: TagListInput, $limit: Int, $offset: Int) {
@@ -878,9 +876,9 @@ export type ResetPasswordByEmailMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordByEmailMutation,
   ResetPasswordByEmailMutationVariables
 >
-export const HomeUserListDocument = gql`
-  query HomeUserList($filter: SearchInput, $limit: Int, $offset: Int) {
-    homeUserList(filter: $filter, limit: $limit, offset: $offset) {
+export const UserListDocument = gql`
+  query UserList($filter: SearchInput, $limit: Int, $offset: Int) {
+    userList(filter: $filter, limit: $limit, offset: $offset) {
       id
       avatar {
         name
@@ -893,16 +891,16 @@ export const HomeUserListDocument = gql`
 `
 
 /**
- * __useHomeUserListQuery__
+ * __useUserListQuery__
  *
- * To run a query within a React component, call `useHomeUserListQuery` and pass it any options that fit your needs.
- * When your component renders, `useHomeUserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useHomeUserListQuery({
+ * const { data, loading, error } = useUserListQuery({
  *   variables: {
  *      filter: // value for 'filter'
  *      limit: // value for 'limit'
@@ -910,37 +908,32 @@ export const HomeUserListDocument = gql`
  *   },
  * });
  */
-export function useHomeUserListQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    HomeUserListQuery,
-    HomeUserListQueryVariables
-  >
+export function useUserListQuery(
+  baseOptions?: Apollo.QueryHookOptions<UserListQuery, UserListQueryVariables>
 ) {
   const options = {...defaultOptions, ...baseOptions}
-  return Apollo.useQuery<HomeUserListQuery, HomeUserListQueryVariables>(
-    HomeUserListDocument,
+  return Apollo.useQuery<UserListQuery, UserListQueryVariables>(
+    UserListDocument,
     options
   )
 }
-export function useHomeUserListLazyQuery(
+export function useUserListLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    HomeUserListQuery,
-    HomeUserListQueryVariables
+    UserListQuery,
+    UserListQueryVariables
   >
 ) {
   const options = {...defaultOptions, ...baseOptions}
-  return Apollo.useLazyQuery<HomeUserListQuery, HomeUserListQueryVariables>(
-    HomeUserListDocument,
+  return Apollo.useLazyQuery<UserListQuery, UserListQueryVariables>(
+    UserListDocument,
     options
   )
 }
-export type HomeUserListQueryHookResult = ReturnType<
-  typeof useHomeUserListQuery
+export type UserListQueryHookResult = ReturnType<typeof useUserListQuery>
+export type UserListLazyQueryHookResult = ReturnType<
+  typeof useUserListLazyQuery
 >
-export type HomeUserListLazyQueryHookResult = ReturnType<
-  typeof useHomeUserListLazyQuery
->
-export type HomeUserListQueryResult = Apollo.QueryResult<
-  HomeUserListQuery,
-  HomeUserListQueryVariables
+export type UserListQueryResult = Apollo.QueryResult<
+  UserListQuery,
+  UserListQueryVariables
 >

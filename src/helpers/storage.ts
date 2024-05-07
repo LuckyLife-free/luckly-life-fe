@@ -1,3 +1,4 @@
+import {useCallback} from 'react'
 import {createGlobalState, useLocalStorage} from 'react-use'
 
 export const useToken = function () {
@@ -5,7 +6,16 @@ export const useToken = function () {
 }
 
 export const useRecentSearch = function () {
-  return useLocalStorage<Maybe<string[]>>('RECENT_SEARCH', [])
+  const [searches, setValue] = useLocalStorage<string[]>('RECENT_SEARCH', [])
+  const addSearch = useCallback(
+    (search: string) => {
+      if (!searches?.includes(search)) {
+        setValue([search, ...(searches ?? [])])
+      }
+    },
+    [setValue, searches]
+  )
+  return [searches, addSearch] as const
 }
 
 export const useBottomTab = createGlobalState<'home' | 'publish' | 'search'>(

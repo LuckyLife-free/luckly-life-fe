@@ -2,11 +2,11 @@ import cover from '@/assets/cover.jpg'
 import {TitleBar, WithBottomBar, useTitleBar} from '@/components'
 import {
   useActivityListQuery,
-  useHomeArticleListQuery,
-  useHomeUserListQuery,
+  useArticleListQuery,
   useTagQuery,
+  useUserListQuery,
 } from '@/generated'
-import {ArrowBack} from '@mui/icons-material'
+import {ChevronLeftRounded} from '@mui/icons-material'
 import {Avatar, IconButton, Stack, Typography} from '@mui/material'
 import {format} from 'date-fns'
 import {useNavigate} from 'react-router-dom'
@@ -21,19 +21,19 @@ export function HomePage() {
     variables: {filter: {id: tagId!}},
     skip: !tagId,
   })
-  const {data: articleData} = useHomeArticleListQuery({
+  const {data: articleData} = useArticleListQuery({
     variables: {limit: 18, filter: {tags: tagId ? [{id: tagId}] : null}},
   })
   const {data: activityData} = useActivityListQuery({
     variables: {limit: 6, filter: {tag: tagId ? {id: tagId} : null}},
   })
-  const {data: latestArticleData} = useHomeArticleListQuery({
+  const {data: latestArticleData} = useArticleListQuery({
     variables: {
       filter: {latest: true, tags: tagId ? [{id: tagId}] : null},
       limit: 18,
     },
   })
-  const {data: userData} = useHomeUserListQuery({
+  const {data: userData} = useUserListQuery({
     variables: {limit: 9},
   })
 
@@ -43,7 +43,7 @@ export function HomePage() {
         <TitleBar titleHidden>
           <Stack direction="row" alignItems="center" width="100vw">
             <IconButton onClick={() => navigate(-1)}>
-              <ArrowBack />
+              <ChevronLeftRounded />
             </IconButton>
             {tagData?.tag?.name}
           </Stack>
@@ -53,7 +53,7 @@ export function HomePage() {
       )}
       <HomePageCard
         title="为你推荐"
-        data={articleData?.homeArticleList ?? []}
+        data={articleData?.articleList ?? []}
         column={2}
         row={3}
       >
@@ -80,7 +80,7 @@ export function HomePage() {
       </HomePageCard>
       <HomePageCard
         title="热门创作者"
-        data={userData?.homeUserList ?? []}
+        data={userData?.userList ?? []}
         column={3}
         row={1}
       >
@@ -109,7 +109,7 @@ export function HomePage() {
       </HomePageCard>
       <HomePageCard
         title="最新发布"
-        data={latestArticleData?.homeArticleList ?? []}
+        data={latestArticleData?.articleList ?? []}
         column={2}
         row={3}
       >

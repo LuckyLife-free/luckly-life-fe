@@ -10,8 +10,8 @@ mutation DeleteArticle($input: IdInput!) {
   deleteArticle(input: $input)
 }
 
-query HomeArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
-  homeArticleList(filter: $filter, limit: $limit, offset: $offset) {
+query ArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
+  articleList(filter: $filter, limit: $limit, offset: $offset) {
     author {
       name
     }

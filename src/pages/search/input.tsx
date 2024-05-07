@@ -9,6 +9,8 @@ import {
   Typography,
   styled,
 } from '@mui/material'
+import {useRef, useState} from 'react'
+import {useUpdateEffect} from 'react-use'
 
 const StyledOutlinedInput = styled(OutlinedInput)(({theme: t}) => ({
   '.MuiOutlinedInput-notchedOutline': {
@@ -25,15 +27,24 @@ type SearchInputProps = {
 }
 
 export function SearchInput(props: SearchInputProps) {
+  const ref = useRef<HTMLDivElement>()
   const {onFocusedChange} = props
-  const [searches, setSearches] = useRecentSearch()
-  const [value, setValue] = useSearch()
+  const [searches, addSearch] = useRecentSearch()
+  const [search, setSearch] = useSearch()
+  const [value, setValue] = useState('')
+  const placeholder = searches?.[0]
+
+  useUpdateEffect(() => {
+    search && addSearch(search)
+    setValue(search)
+  }, [search])
 
   return (
     <StyledOutlinedInput
       fullWidth
+      ref={ref}
       value={value}
-      placeholder={searches?.[0]}
+      placeholder={placeholder}
       sx={{input: {zIndex: 999}}}
       onFocus={() => onFocusedChange?.(true)}
       onBlur={() => setTimeout(() => onFocusedChange?.(false), 100)}
@@ -46,7 +57,7 @@ export function SearchInput(props: SearchInputProps) {
           divider={<Divider orientation="vertical" flexItem sx={{my: 1}} />}
         >
           {value && (
-            <IconButton onClick={() => setValue('')}>
+            <IconButton onClick={() => setSearch('')}>
               <Cancel fontSize="small" color="disabled" />
             </IconButton>
           )}
@@ -54,8 +65,8 @@ export function SearchInput(props: SearchInputProps) {
             variant="text"
             color="primary"
             sx={{minWidth: 0}}
-            onClick={() => setSearches((prev) => [...(prev ?? []), value])}
-            disabled={!value}
+            onClick={() => setSearch(value ?? placeholder)}
+            disabled={!value && !placeholder}
           >
             <Typography variant="body2" noWrap pr={1}>
               搜索

@@ -251,21 +251,12 @@ type Query {
   征文列表
   """
   activityList(filter: ActivityListInput, limit: Int, offset: Int): [Activity!]!
-  hello: String!
 
   """
   主页推送文章
   """
-  homeArticleList(
-    filter: ArticleListInput
-    limit: Int
-    offset: Int
-  ): [Article!]!
-
-  """
-  主页推送用户
-  """
-  homeUserList(filter: SearchInput, limit: Int, offset: Int): [User!]!
+  articleList(filter: ArticleListInput, limit: Int, offset: Int): [Article!]!
+  hello: String!
 
   """
   获取当前用户信息
@@ -291,6 +282,11 @@ type Query {
   标签列表
   """
   tagList(filter: TagListInput, limit: Int, offset: Int): [Tag!]!
+
+  """
+  主页推送用户
+  """
+  userList(filter: SearchInput, limit: Int, offset: Int): [User!]!
 }
 
 input SearchInput {

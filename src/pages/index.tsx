@@ -7,6 +7,7 @@ import {Reset} from './auth/reset'
 import {HomePage} from './home'
 import {Publish} from './publish'
 import {SearchPage} from './search'
+import {SearchResultPage} from './search/search'
 
 export function RootEntry() {
   const [token] = useToken()
@@ -17,7 +18,10 @@ export function RootEntry() {
   useShallowCompareEffect(() => {
     if (!token) {
       navigate('/login')
-    } else if (authPath.some((path) => pathname.startsWith(path))) {
+    } else if (
+      pathname === '/' ||
+      authPath.some((path) => pathname.startsWith(path))
+    ) {
       navigate('/home')
     }
   }, [{token}])
@@ -31,6 +35,7 @@ export function RootEntry() {
       <Route path="/publish" Component={Publish} />
       <Route path="/search" Component={SearchPage} />
       <Route path="/search/home" Component={HomePage} />
+      <Route path="/search/result" Component={SearchResultPage} />
     </Routes>
   )
 }
