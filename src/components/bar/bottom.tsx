@@ -43,7 +43,7 @@ export function WithBottomBar(props: WithBottomBarProps) {
   )
 
   return (
-    <Stack height="100vh" sx={{opacity}}>
+    <Stack height={window.innerHeight} sx={{opacity}}>
       <Stack flex={1} overflow="auto" ref={contentRef}>
         {children}
       </Stack>

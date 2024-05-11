@@ -65,7 +65,7 @@ export function WithTitleBar(props: WithTitleBarProps) {
   const {barLeft, barRight, title, bgcolor, children} = props
 
   return (
-    <Stack height="100vh">
+    <Stack height={window.innerHeight}>
       <Stack
         sx={(t) => ({
           top: 0,
