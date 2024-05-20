@@ -1,10 +1,15 @@
 import cover from '@/assets/cover.jpg'
-import {AsyncStatus} from '@/components/status'
-import {ArticleListInput, useArticleListQuery} from '@/generated'
+import {VerticalSliding} from '@/components'
+import {
+  ArticleListInput,
+  ArticleListQueryResult,
+  useArticleListLazyQuery,
+} from '@/generated'
+import {ListQuery, useListData} from '@/helpers'
 import {ChevronRightOutlined} from '@mui/icons-material'
 import {Avatar, IconButton, Stack, SxProps, Typography} from '@mui/material'
 import {format} from 'date-fns'
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 
 type ArticleListProps = ArticleListInput & {
@@ -12,27 +17,36 @@ type ArticleListProps = ArticleListInput & {
   sx?: SxProps
 }
 
+type Datum = NonNullable<ArticleListQueryResult['data']>['articleList'][number]
+
 export function ArticleList(props: ArticleListProps) {
   const {hidden, sx, ...input} = props
   const navigate = useNavigate()
-  const [skip, setSkip] = useState(true)
-  const {data: articleData, loading} = useArticleListQuery({
+  const [query, {loading}] = useArticleListLazyQuery({
     variables: {filter: input, limit: 18},
-    skip,
   })
+  const listQuery = useCallback<ListQuery<Datum>>(
+    async (pagination) => {
+      const {data} = await query({variables: {...pagination}})
+      return data?.articleList ?? []
+    },
+    [query]
+  )
+  const {reloadList, fetchMore, data} = useListData(listQuery)
 
   useEffect(() => {
-    !hidden && setSkip(false)
-  }, [input.search, hidden])
+    !hidden && reloadList()
+  }, [hidden, reloadList])
 
   return (
-    <AsyncStatus
-      hidden={hidden}
+    <VerticalSliding
+      onScrollToTop={reloadList}
+      onScrollToBottom={fetchMore}
       loading={loading}
-      empty={articleData?.articleList.length === 0}
+      height={500}
     >
       <Stack spacing={2} sx={sx}>
-        {articleData?.articleList.map((d) => (
+        {data.map((d) => (
           <Stack
             key={d.id}
             direction="row"
@@ -70,6 +84,6 @@ export function ArticleList(props: ArticleListProps) {
           </Stack>
         ))}
       </Stack>
-    </AsyncStatus>
+    </VerticalSliding>
   )
 }

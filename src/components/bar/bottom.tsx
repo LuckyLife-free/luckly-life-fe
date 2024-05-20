@@ -7,9 +7,9 @@ import {
   Search,
 } from '@mui/icons-material'
 import {BottomNavigation, BottomNavigationAction, Stack} from '@mui/material'
-import {PropsWithChildren, RefObject, useCallback, useState} from 'react'
+import {PropsWithChildren, RefObject, useCallback} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
-import {useEffectOnce, useKeyPressEvent} from 'react-use'
+import {useEffectOnce} from 'react-use'
 
 type WithBottomBarProps = PropsWithChildren<{
   contentRef: RefObject<HTMLElement>
@@ -20,9 +20,6 @@ export function WithBottomBar(props: WithBottomBarProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const [value, setValue] = useBottomTab()
-  const [opacity, setOpacity] = useState(
-    (import.meta as any).env.MODE === 'development' ? 0.05 : 1
-  )
   const scrollToTop = useCallback(() => {
     contentRef.current?.scrollTo({top: 0})
   }, [contentRef])
@@ -37,13 +34,8 @@ export function WithBottomBar(props: WithBottomBarProps) {
     }
   })
 
-  useKeyPressEvent(
-    (e) => e.ctrlKey && e.key === 's',
-    () => setOpacity(opacity === 1 ? 0.05 : 1)
-  )
-
   return (
-    <Stack height={window.innerHeight} sx={{opacity}}>
+    <Stack height={window.innerHeight}>
       <Stack flex={1} overflow="auto" ref={contentRef}>
         {children}
       </Stack>

@@ -18,7 +18,7 @@ export function AsyncStatus(props: AsyncStatusProps) {
     </Stack>
   ) : loading ? (
     <Stack minHeight={64} justifyContent="center" alignItems="center">
-      <CircularProgress />
+      <CircularProgress size={30} thickness={6} />
     </Stack>
   ) : (
     <>{children}</>

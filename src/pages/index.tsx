@@ -1,4 +1,4 @@
-import {useToken} from '@/helpers'
+import {useShadowMode, useToken} from '@/helpers'
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom'
 import {useShallowCompareEffect} from 'react-use'
 import {Login} from './auth/login'
@@ -16,6 +16,8 @@ export function RootEntry() {
   const {pathname} = useLocation()
   const navigate = useNavigate()
   const authPath = ['/login', '/logon', '/reset']
+
+  useShadowMode()
 
   useShallowCompareEffect(() => {
     if (!token) {

@@ -1,35 +1,51 @@
 import cover from '@/assets/cover.jpg'
-import {AsyncStatus} from '@/components/status'
-import {ActivityListInput, useActivityListQuery} from '@/generated'
+import {VerticalSliding} from '@/components'
+import {
+  ActivityListInput,
+  ActivityListQueryResult,
+  useActivityListLazyQuery,
+} from '@/generated'
+import {ListQuery, useListData} from '@/helpers'
 import {Stack, SxProps, Typography} from '@mui/material'
 import {format} from 'date-fns'
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect} from 'react'
 
 type ActivityListProps = ActivityListInput & {
   hidden?: boolean
   sx?: SxProps
 }
 
+type Datum = NonNullable<
+  ActivityListQueryResult['data']
+>['activityList'][number]
+
 export function ActivityList(props: ActivityListProps) {
-  const {hidden, sx, ...input} = props
-  const [skip, setSkip] = useState(true)
-  const {data: activityData, loading} = useActivityListQuery({
-    variables: {filter: input, limit: 18},
-    skip,
+  const {hidden, sx, ...rest} = props
+  const [query, {loading}] = useActivityListLazyQuery({
+    variables: {filter: rest, offset: 0, limit: 18},
   })
+  const listQuery = useCallback<ListQuery<Datum>>(
+    async (pagination) => {
+      const {data} = await query({variables: {...pagination}})
+      return data?.activityList ?? []
+    },
+    [query]
+  )
+  const {reloadList, fetchMore, data} = useListData(listQuery)
 
   useEffect(() => {
-    !hidden && setSkip(false)
-  }, [input.search, hidden])
+    !hidden && reloadList()
+  }, [hidden, reloadList])
 
   return (
-    <AsyncStatus
-      hidden={hidden}
+    <VerticalSliding
+      onScrollToTop={reloadList}
+      onScrollToBottom={fetchMore}
       loading={loading}
-      empty={activityData?.activityList.length === 0}
+      height={500}
     >
       <Stack spacing={2} sx={sx}>
-        {activityData?.activityList.map((d) => (
+        {data.map((d) => (
           <Stack
             key={d.id}
             justifyContent="end"
@@ -79,6 +95,6 @@ export function ActivityList(props: ActivityListProps) {
           </Stack>
         ))}
       </Stack>
-    </AsyncStatus>
+    </VerticalSliding>
   )
 }

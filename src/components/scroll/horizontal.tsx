@@ -33,11 +33,11 @@ function usePressDistance(
   })
   useEvent('touchend', () => {
     if (end - start > 50) {
-      return setValue((prev) => ({
+      setValue((prev) => ({
         offset: Math.min(offsetDomain[1], prev.offset + 1),
       }))
     } else if (start - end > 50) {
-      return setValue((prev) => ({
+      setValue((prev) => ({
         offset: Math.max(offsetDomain[0], prev.offset - 1),
       }))
     }
@@ -46,7 +46,7 @@ function usePressDistance(
   return value
 }
 
-export function SlidingContainer(props: SlidingContainerProps) {
+export function HorizontalSliding(props: SlidingContainerProps) {
   const {distancePerScratch, offsetDomain, children} = props
   const ref = useRef<HTMLElement>(null)
   const childrenRef = useRef<HTMLDivElement>(null)

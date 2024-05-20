@@ -1,4 +1,4 @@
-import {SlidingContainer} from '@/components/scroll/sliding'
+import {HorizontalSliding} from '@/components'
 import {IdInput} from '@/generated'
 import {Box, Grid, Typography} from '@mui/material'
 import {isFunction} from 'lodash-es'
@@ -29,7 +29,7 @@ export function HomePageCard<T extends IdInput>(props: {
   return (
     <Box p={3} pr={0}>
       <Typography variant="h6">{title}</Typography>
-      <SlidingContainer
+      <HorizontalSliding
         distancePerScratch={window.innerWidth - 32}
         offsetDomain={[-slideOffset, 0]}
       >
@@ -48,7 +48,7 @@ export function HomePageCard<T extends IdInput>(props: {
             ))}
           </Grid>
         )}
-      </SlidingContainer>
+      </HorizontalSliding>
     </Box>
   )
 }
