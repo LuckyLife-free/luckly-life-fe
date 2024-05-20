@@ -14,10 +14,4 @@ export function useShadowMode() {
   useEffect(() => {
     document.body.style.opacity = String(opacity)
   }, [opacity])
-
-  useEffect(() => {
-    document.addEventListener('touchmove', (e) => e.preventDefault(), {
-      passive: false,
-    })
-  }, [])
 }

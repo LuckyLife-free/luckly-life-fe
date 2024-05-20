@@ -21,19 +21,19 @@ export function HomePage() {
     variables: {filter: {id: tagId!}},
     skip: !tagId,
   })
-  const {data: articleData} = useArticleListQuery({
+  const {data: articleData, loading: articleLoading} = useArticleListQuery({
     variables: {limit: 18, filter: {tags: tagId ? [{id: tagId}] : null}},
   })
-  const {data: activityData} = useActivityListQuery({
+  const {data: activityData, loading: activityLoading} = useActivityListQuery({
     variables: {limit: 6, filter: {tag: tagId ? {id: tagId} : null}},
   })
-  const {data: latestArticleData} = useArticleListQuery({
+  const {data: latestData, loading: latestLoading} = useArticleListQuery({
     variables: {
       filter: {latest: true, tags: tagId ? [{id: tagId}] : null},
       limit: 18,
     },
   })
-  const {data: userData} = useUserListQuery({
+  const {data: userData, loading: userLoading} = useUserListQuery({
     variables: {limit: 9},
   })
 
@@ -54,6 +54,7 @@ export function HomePage() {
       <HomePageCard
         title="为你推荐"
         data={articleData?.articleList ?? []}
+        loading={articleLoading}
         column={2}
         row={3}
       >
@@ -81,18 +82,19 @@ export function HomePage() {
       <HomePageCard
         title="热门创作者"
         data={userData?.userList ?? []}
+        loading={userLoading}
         column={3}
         row={1}
       >
         {(d) => (
           <Stack
             alignItems="center"
-            onClick={() => navigate(`/detail/detail?id=${d.id}`)}
+            onClick={() => navigate(`/detail/user?id=${d.id}`)}
           >
             <Avatar
               variant="rounded"
               src={d.avatar?.url || cover}
-              sx={{width: '25vw', height: '25vw'}}
+              sx={{width: '27vw', height: '27vw'}}
             >
               {d.avatar?.name}
             </Avatar>
@@ -112,7 +114,8 @@ export function HomePage() {
       </HomePageCard>
       <HomePageCard
         title="最新发布"
-        data={latestArticleData?.articleList ?? []}
+        data={latestData?.articleList ?? []}
+        loading={latestLoading}
         column={2}
         row={3}
       >
@@ -140,6 +143,7 @@ export function HomePage() {
       <HomePageCard
         title="征文活动"
         data={activityData?.activityList ?? []}
+        loading={activityLoading}
         column={2}
         row={1}
       >

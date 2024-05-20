@@ -44,8 +44,8 @@ export function SearchInput(props: SearchInputProps) {
       fullWidth
       ref={ref}
       value={value}
+      sx={{zIndex: 999}}
       placeholder={placeholder}
-      sx={{input: {zIndex: 999}}}
       onFocus={() => onFocusedChange?.(true)}
       onBlur={() => setTimeout(() => onFocusedChange?.(false), 100)}
       onChange={(e) => setValue(e.target.value)}

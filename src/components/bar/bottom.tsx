@@ -21,7 +21,7 @@ export function WithBottomBar(props: WithBottomBarProps) {
   const location = useLocation()
   const [value, setValue] = useBottomTab()
   const scrollToTop = useCallback(() => {
-    contentRef.current?.scrollTo({top: 0})
+    contentRef.current?.scrollTo({top: 0, behavior: 'smooth'})
   }, [contentRef])
 
   useEffectOnce(() => {

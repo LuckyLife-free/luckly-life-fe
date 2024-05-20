@@ -7,12 +7,12 @@ import {SearchInput} from './input'
 
 export function SearchPage() {
   const {data: tagData} = useTagListQuery()
-  const {ref: contentRef, barHidden} = useTitleBar()
+  const {ref: contentRef} = useTitleBar()
   const navigate = useNavigate()
 
   return (
     <WithBottomBar contentRef={contentRef}>
-      <TitleBar barHidden={barHidden}>
+      <TitleBar barHidden>
         <Stack position="relative" onClick={() => navigate('/search/result')}>
           <SearchInput />
         </Stack>
