@@ -1,20 +1,8 @@
-import {HorizontalSliding} from '@/components'
 import {IdInput} from '@/generated'
 import {Box, Grid, Skeleton, Stack, Typography} from '@mui/material'
-import {isFunction} from 'lodash-es'
+import {chunk, isFunction} from 'lodash-es'
 import {ReactNode} from 'react'
-
-const widthDict = {
-  1: 'calc(100vw - 32px)',
-  2: 'calc(50vw - 16px)',
-  3: 'calc(33.33vw - 10.66px)',
-}
-
-const heightDict = {
-  1: 200,
-  2: 400,
-  3: 600,
-}
+import {Swiper, SwiperSlide} from 'swiper/react'
 
 export function HomePageCard<T extends IdInput>(props: {
   children: Computable<ReactNode, T>
@@ -25,10 +13,9 @@ export function HomePageCard<T extends IdInput>(props: {
   data: T[]
 }) {
   const {children, loading, row, column, data, title} = props
-  const slideOffset = Math.floor(data.length / (row * column)) - 1
 
   return (
-    <Box p={3} pr={0}>
+    <Box m={3} boxSizing="border-box" overflow="visible">
       <Typography variant="h6">{title}</Typography>
       {loading ? (
         <Stack direction="row" flex={1}>
@@ -44,26 +31,23 @@ export function HomePageCard<T extends IdInput>(props: {
           </Stack>
         </Stack>
       ) : (
-        <HorizontalSliding
-          distancePerScratch={window.innerWidth - 32}
-          offsetDomain={[-slideOffset, 0]}
+        <Swiper
+          slidesPerView={column * 1.1}
+          slidesPerGroup={2}
+          spaceBetween={16}
         >
-          {(ref) => (
-            <Grid
-              ref={ref}
-              container
-              direction="column"
-              maxHeight={heightDict[row]}
-              spacing={2}
-            >
-              {data.map((item) => (
-                <Grid item key={item.id} width={widthDict[column]}>
-                  {isFunction(children) ? children(item) : children}
-                </Grid>
-              ))}
-            </Grid>
-          )}
-        </HorizontalSliding>
+          {chunk(data, row).map((group, i) => (
+            <SwiperSlide key={i}>
+              <Grid container direction="column">
+                {group.map((item) => (
+                  <Grid item key={item.id} width="100%">
+                    {isFunction(children) ? children(item) : children}
+                  </Grid>
+                ))}
+              </Grid>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       )}
     </Box>
   )

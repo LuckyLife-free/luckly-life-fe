@@ -67,8 +67,8 @@ export function HomePage() {
             >
               {d.cover?.name}
             </Avatar>
-            <Typography noWrap variant="subtitle1">
-              {d.title}
+            <Typography noWrap variant="subtitle1" minHeight="1em">
+              &nbsp;{d.title}
             </Typography>
             <Typography
               variant="caption"
@@ -94,7 +94,7 @@ export function HomePage() {
             <Avatar
               variant="rounded"
               src={d.avatar?.url || cover}
-              sx={{width: '27vw', height: '27vw'}}
+              sx={{width: '100%', height: '27vw'}}
             >
               {d.avatar?.name}
             </Avatar>
@@ -129,7 +129,7 @@ export function HomePage() {
               {d.cover?.name}
             </Avatar>
             <Typography noWrap variant="subtitle1">
-              {d.title}
+              &nbsp;{d.title}
             </Typography>
             <Typography
               variant="caption"
@@ -157,7 +157,7 @@ export function HomePage() {
               {d.cover?.name}
             </Avatar>
             <Typography noWrap variant="subtitle1">
-              {d.title}
+              &nbsp;{d.title}
             </Typography>
             <Typography
               variant="caption"

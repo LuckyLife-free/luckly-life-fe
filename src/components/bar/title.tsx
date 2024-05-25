@@ -34,7 +34,7 @@ export function TitleBar(props: TitleBarProps) {
       <Stack
         sx={(t) => ({
           top: 0,
-          zIndex: 1,
+          zIndex: 10,
           position: 'absolute',
           transition: 'all .5s',
           bgcolor: t.palette.grey[50],

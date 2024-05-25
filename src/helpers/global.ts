@@ -3,7 +3,7 @@ import {useKeyPressEvent} from 'react-use'
 
 export function useShadowMode() {
   const [opacity, setOpacity] = useState(
-    (import.meta as any).env.MODE === 'development' ? 0.2 : 1
+    (import.meta as any).env.MODE === 'development' ? 1 : 1
   )
 
   useKeyPressEvent(

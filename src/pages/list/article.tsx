@@ -43,7 +43,7 @@ export function ArticleList(props: ArticleListProps) {
       onScrollToTop={reloadList}
       onScrollToBottom={fetchMore}
       loading={loading}
-      height={500}
+      height={400}
     >
       <Stack spacing={2} sx={sx}>
         {data.map((d) => (
