@@ -16,7 +16,9 @@ export function HomePageCard<T extends IdInput>(props: {
 
   return (
     <Box m={3} boxSizing="border-box" overflow="visible">
-      <Typography variant="h6">{title}</Typography>
+      <Typography variant="h6" pb={1}>
+        {title}
+      </Typography>
       {loading ? (
         <Stack direction="row" flex={1}>
           <Stack flex={1} gap={1}>

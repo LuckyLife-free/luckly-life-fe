@@ -2,7 +2,7 @@ import {useCallback, useMemo} from 'react'
 import {useToken} from './storage'
 
 export function useUploadFiles() {
-  const url = 'http://localhost/upload'
+  const url = `http://${(import.meta as any).env.VITE_HOST}/upload`
   const [token] = useToken()
   const headers = useMemo(
     () => new Headers({Authorization: `Bearer ${token}`}),
@@ -26,6 +26,6 @@ export function useUploadFiles() {
 
       return data.map((id) => ({id}))
     },
-    [headers]
+    [headers, url]
   )
 }
