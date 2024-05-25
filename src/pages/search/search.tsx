@@ -21,13 +21,13 @@ export function SearchResult() {
   const navigate = useNavigate()
 
   return (
-    <Stack p={2}>
+    <Stack p={2} height={window.innerHeight}>
       <Stack position="relative">
         <Stack direction="row" alignItems="center">
           <IconButton size="small" onClick={() => navigate(-1)}>
             <ArrowBackRounded />
           </IconButton>
-          <SearchInput onFocusedChange={setFocused} />
+          <SearchInput onFocusedChange={setFocused} autoFocus />
         </Stack>
         {focused && (
           <Stack
@@ -57,17 +57,21 @@ export function SearchResult() {
           </Stack>
         )}
       </Stack>
-      <Box hidden={focused} pt={1}>
-        <MyTabs tabs={TabData}>
-          {({tab}) => (
-            <Stack mt={2}>
-              <ArticleList hidden={tab !== '1'} search={search} latest />
-              <ArticleList hidden={tab !== '2'} search={search} />
-              <ActivityList hidden={tab !== '3'} search={search} />
-            </Stack>
-          )}
-        </MyTabs>
-      </Box>
+      {!focused && (
+        <Box flex={1} hidden={focused}>
+          <MyTabs tabs={TabData} sx={{mb: 2, mt: 1}}>
+            {({tab}) =>
+              tab === '1' ? (
+                <ArticleList search={search} latest />
+              ) : tab === '2' ? (
+                <ArticleList search={search} />
+              ) : tab === '3' ? (
+                <ActivityList search={search} />
+              ) : null
+            }
+          </MyTabs>
+        </Box>
+      )}
     </Stack>
   )
 }

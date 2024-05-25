@@ -6,23 +6,20 @@ import {
   useActivityListLazyQuery,
 } from '@/generated'
 import {ListQuery, useListData} from '@/helpers'
-import {Stack, SxProps, Typography} from '@mui/material'
+import {Stack, Typography} from '@mui/material'
 import {format} from 'date-fns'
-import {useCallback, useEffect} from 'react'
+import {useCallback} from 'react'
+import {useEffectOnce} from 'react-use'
 
-type ActivityListProps = ActivityListInput & {
-  hidden?: boolean
-  sx?: SxProps
-}
+type ActivityListProps = ActivityListInput
 
 type Datum = NonNullable<
   ActivityListQueryResult['data']
 >['activityList'][number]
 
 export function ActivityList(props: ActivityListProps) {
-  const {hidden, sx, ...rest} = props
   const [query, {loading}] = useActivityListLazyQuery({
-    variables: {filter: rest, offset: 0, limit: 18},
+    variables: {filter: props, offset: 0, limit: 18},
   })
   const listQuery = useCallback<ListQuery<Datum>>(
     async (pagination) => {
@@ -33,18 +30,17 @@ export function ActivityList(props: ActivityListProps) {
   )
   const {reloadList, fetchMore, data} = useListData(listQuery)
 
-  useEffect(() => {
-    !hidden && reloadList()
-  }, [hidden, reloadList])
+  useEffectOnce(() => {
+    reloadList()
+  })
 
   return (
     <VerticalSliding
       onScrollToTop={reloadList}
       onScrollToBottom={fetchMore}
       loading={loading}
-      height={500}
     >
-      <Stack spacing={2} sx={sx}>
+      <Stack spacing={2} mb={2}>
         {data.map((d) => (
           <Stack
             key={d.id}

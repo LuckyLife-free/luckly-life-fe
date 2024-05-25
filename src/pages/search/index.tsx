@@ -1,5 +1,5 @@
 import cover from '@/assets/cover.jpg'
-import {TitleBar, WithBottomBar, useTitleBar} from '@/components'
+import {TitleBar, WithBottomBar} from '@/components'
 import {useTagListQuery} from '@/generated'
 import {Avatar, Grid, Stack, Typography} from '@mui/material'
 import {useNavigate} from 'react-router-dom'
@@ -7,17 +7,16 @@ import {SearchInput} from './input'
 
 export function SearchPage() {
   const {data: tagData} = useTagListQuery()
-  const {ref: contentRef} = useTitleBar()
   const navigate = useNavigate()
 
   return (
-    <WithBottomBar contentRef={contentRef}>
+    <WithBottomBar>
       <TitleBar barHidden>
         <Stack position="relative" onClick={() => navigate('/search/result')}>
           <SearchInput />
         </Stack>
       </TitleBar>
-      <Grid container overflow="auto" padding={3} spacing={2}>
+      <Grid flex={1} container overflow="auto" padding={3} spacing={2}>
         {tagData?.tagList.map((d) => (
           <Grid item xs={6} key={d.id}>
             <Stack

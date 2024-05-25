@@ -7,22 +7,19 @@ import {
   Search,
 } from '@mui/icons-material'
 import {BottomNavigation, BottomNavigationAction, Stack} from '@mui/material'
-import {PropsWithChildren, RefObject, useCallback} from 'react'
+import {PropsWithChildren} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {useEffectOnce} from 'react-use'
 
 type WithBottomBarProps = PropsWithChildren<{
-  contentRef: RefObject<HTMLElement>
+  onClickMenu?: () => void
 }>
 
 export function WithBottomBar(props: WithBottomBarProps) {
-  const {children, contentRef} = props
+  const {children, onClickMenu} = props
   const navigate = useNavigate()
   const location = useLocation()
   const [value, setValue] = useBottomTab()
-  const scrollToTop = useCallback(() => {
-    contentRef.current?.scrollTo({top: 0, behavior: 'smooth'})
-  }, [contentRef])
 
   useEffectOnce(() => {
     if (location.pathname.startsWith('/home')) {
@@ -36,34 +33,30 @@ export function WithBottomBar(props: WithBottomBarProps) {
 
   return (
     <Stack height={window.innerHeight}>
-      <Stack flex={1} overflow="auto" ref={contentRef}>
-        {children}
-      </Stack>
+      {children}
       <BottomNavigation
         showLabels
         value={value}
         onChange={(_, newValue) => setValue(newValue)}
-        sx={{borderTop: (t) => `1px solid ${t.palette.divider}`}}
+        sx={{borderTop: (t) => `1px solid ${t.palette.divider}`, flexShrink: 0}}
       >
         <BottomNavigationAction
           label="主页"
           value="home"
           icon={value === 'home' ? <Home /> : <HomeOutlined />}
-          onClick={() => navigate('/home')}
-          onDoubleClick={scrollToTop}
+          onClick={() => (onClickMenu?.(), navigate('/home'))}
         />
         <BottomNavigationAction
           label="发布"
           value="publish"
           icon={value === 'publish' ? <AddCircle /> : <AddCircleOutline />}
-          onClick={() => navigate('/publish')}
+          onClick={() => (onClickMenu?.(), navigate('/publish'))}
         />
         <BottomNavigationAction
           label="搜索"
           value="search"
           icon={<Search />}
-          onClick={() => navigate('/search')}
-          onDoubleClick={scrollToTop}
+          onClick={() => (onClickMenu?.(), navigate('/search'))}
         />
       </BottomNavigation>
     </Stack>

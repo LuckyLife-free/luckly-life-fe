@@ -1,4 +1,5 @@
-import {useCallback, useState} from 'react'
+import {throttle} from 'lodash-es'
+import {useCallback, useMemo, useState} from 'react'
 
 export type ListQuery<T> = (pagination: {
   offset: number
@@ -18,6 +19,18 @@ export function useListData<T>(query: ListQuery<T>) {
     setData((prev) => [...prev, ...data])
     setOffset((prev) => prev + limit)
   }, [offset, query])
+  const throttledReloadList = useMemo(
+    () => throttle(reloadList, 1000),
+    [reloadList]
+  )
+  const throttledFetchMore = useMemo(
+    () => throttle(fetchMore, 1000),
+    [fetchMore]
+  )
 
-  return {data, reloadList, fetchMore}
+  return {
+    reloadList: throttledReloadList,
+    fetchMore: throttledFetchMore,
+    data,
+  }
 }

@@ -7,23 +7,20 @@ import {
 } from '@/generated'
 import {ListQuery, useListData} from '@/helpers'
 import {ChevronRightOutlined} from '@mui/icons-material'
-import {Avatar, IconButton, Stack, SxProps, Typography} from '@mui/material'
+import {Avatar, IconButton, Stack, Typography} from '@mui/material'
 import {format} from 'date-fns'
-import {useCallback, useEffect} from 'react'
+import {useCallback} from 'react'
 import {useNavigate} from 'react-router-dom'
+import {useEffectOnce} from 'react-use'
 
-type ArticleListProps = ArticleListInput & {
-  hidden?: boolean
-  sx?: SxProps
-}
+type ArticleListProps = ArticleListInput
 
 type Datum = NonNullable<ArticleListQueryResult['data']>['articleList'][number]
 
 export function ArticleList(props: ArticleListProps) {
-  const {hidden, sx, ...input} = props
   const navigate = useNavigate()
   const [query, {loading}] = useArticleListLazyQuery({
-    variables: {filter: input, limit: 18},
+    variables: {filter: props, limit: 18},
   })
   const listQuery = useCallback<ListQuery<Datum>>(
     async (pagination) => {
@@ -34,18 +31,17 @@ export function ArticleList(props: ArticleListProps) {
   )
   const {reloadList, fetchMore, data} = useListData(listQuery)
 
-  useEffect(() => {
-    !hidden && reloadList()
-  }, [hidden, reloadList])
+  useEffectOnce(() => {
+    reloadList()
+  })
 
   return (
     <VerticalSliding
       onScrollToTop={reloadList}
       onScrollToBottom={fetchMore}
       loading={loading}
-      height={400}
     >
-      <Stack spacing={2} sx={sx}>
+      <Stack spacing={2} mb={2}>
         {data.map((d) => (
           <Stack
             key={d.id}

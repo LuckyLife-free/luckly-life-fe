@@ -1,6 +1,6 @@
 import {Box, Stack} from '@mui/material'
 import anime from 'animejs'
-import {ReactNode, RefObject, useRef, useState} from 'react'
+import {ReactNode, RefObject, useLayoutEffect, useRef, useState} from 'react'
 import {useEvent, useScroll, useToggle, useUpdateEffect} from 'react-use'
 import {AsyncStatus} from '../status'
 
@@ -8,17 +8,16 @@ const loadingHeight = 100
 const triggerDistance = 50
 
 type SlidingContainerProps = {
-  onScrollToTop: AnyFunction
-  onScrollToBottom: AnyFunction
+  onScrollToTop?: AnyFunction
+  onScrollToBottom?: AnyFunction
   children: ReactNode
   loading: boolean
-  height: Meta
 }
 
 function usePressDistance(props: {
   ref: RefObject<HTMLElement>
-  onScrollToTop: AnyFunction
-  onScrollToBottom: AnyFunction
+  onScrollToTop?: AnyFunction
+  onScrollToBottom?: AnyFunction
 }) {
   const {ref, onScrollToTop, onScrollToBottom} = props
   const [distance, setDistance] = useState(-loadingHeight)
@@ -42,7 +41,7 @@ function usePressDistance(props: {
   })
   useEvent('touchend', () => {
     if (distance > triggerDistance) {
-      onScrollToTop()
+      onScrollToTop?.()
       setTouched(false)
       setDistance(-loadingHeight)
     }
@@ -51,7 +50,7 @@ function usePressDistance(props: {
     if (ref.current) {
       const {scrollHeight, clientHeight} = ref.current
       if (y + clientHeight + triggerDistance >= scrollHeight) {
-        onScrollToBottom()
+        onScrollToBottom?.()
       }
     }
   }, [y])
@@ -60,11 +59,12 @@ function usePressDistance(props: {
 }
 
 export function VerticalSliding(props: SlidingContainerProps) {
-  const {children, height, loading, ...rest} = props
+  const {children, loading, ...rest} = props
   const ref = useRef<HTMLElement>(null)
   const loadingRef = useRef<HTMLElement>(null)
   const {distance, touchend} = usePressDistance({ref, ...rest})
   const [top, setTop] = useState(-loadingHeight)
+  const [height, setHeight] = useState<Meta>('100%')
   const targets = useRef({value: top})
 
   useUpdateEffect(() => {
@@ -89,8 +89,14 @@ export function VerticalSliding(props: SlidingContainerProps) {
     }
   }, [loading, distance, touchend])
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      setHeight(window.innerHeight - ref.current.offsetTop)
+    }
+  }, [])
+
   return (
-    <Box height={height} ref={ref} position="relative" overflow="auto">
+    <Box ref={ref} height={height} position="relative" overflow="auto">
       <Stack width="100%" position="absolute" top={top} ref={loadingRef}>
         <AsyncStatus loading />
       </Stack>

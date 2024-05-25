@@ -23,12 +23,13 @@ const StyledOutlinedInput = styled(OutlinedInput)(({theme: t}) => ({
 }))
 
 type SearchInputProps = {
+  autoFocus?: boolean
   onFocusedChange?: (focused: boolean) => void
 }
 
 export function SearchInput(props: SearchInputProps) {
   const ref = useRef<HTMLDivElement>()
-  const {onFocusedChange} = props
+  const {onFocusedChange, autoFocus} = props
   const [searches, addSearch] = useRecentSearch()
   const [search, setSearch] = useSearch()
   const [value, setValue] = useState('')
@@ -45,6 +46,7 @@ export function SearchInput(props: SearchInputProps) {
       ref={ref}
       value={value}
       sx={{zIndex: 999}}
+      autoFocus={autoFocus}
       placeholder={placeholder}
       onFocus={() => onFocusedChange?.(true)}
       onBlur={() => setTimeout(() => onFocusedChange?.(false), 100)}
