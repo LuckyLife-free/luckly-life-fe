@@ -3,25 +3,29 @@ import {
   LoginByEmailMutationVariables,
   useLoginByEmailMutation,
 } from '@/generated'
-import {useToken} from '@/helpers'
+import {useSnackbar, useToken} from '@/helpers'
 import {PermIdentity} from '@mui/icons-material'
 import {Avatar, Box, Button, Grid, Typography} from '@mui/material'
-import {SubmitHandler} from 'react-hook-form'
 import {Link} from 'react-router-dom'
+import validator from 'validator'
 
 type FormShape = LoginByEmailMutationVariables
 
 export function Login() {
   const [, setToken] = useToken()
+  const [, alert] = useSnackbar()
   const [loginMutation] = useLoginByEmailMutation()
-  const handleSubmit: SubmitHandler<FormShape> = async (data) => {
-    const result = await loginMutation({
-      variables: data,
+  const handleSubmit = async (props: FormShape) => {
+    loginMutation({
+      variables: props,
+      onError() {
+        alert({message: '邮箱或密码错误'})
+      },
+      onCompleted(data) {
+        setToken(data.loginByEmail.token)
+        window.location.reload()
+      },
     })
-    if (result.data?.loginByEmail) {
-      setToken(result.data.loginByEmail.token)
-      window.location.reload()
-    }
   }
 
   return (
@@ -49,6 +53,7 @@ export function Login() {
           label="邮箱"
           autoComplete="email"
           autoFocus
+          validate={validator.isEmail}
         />
         <MyTextField
           name="password"

@@ -3,15 +3,14 @@ import {useController, useFormContext} from 'react-hook-form'
 
 type MyTextFieldProps = BaseTextFieldProps & {
   name: string
-  validate?: (value: string) => Promise<boolean>
+  validate?: (value: string) => boolean | Promise<boolean>
 }
 
 export function MyTextField(props: MyTextFieldProps) {
-  const {name, validate, ...rest} = props
+  const {name, validate, placeholder, required, ...rest} = props
+  const {fieldState} = useController({name, rules: {validate, required}})
   const {register, getFieldState} = useFormContext()
-  const {fieldState} = useController({name, rules: {validate}})
   const {error: fieldError} = getFieldState(name)
-  const placeholder = fieldError?.message ?? rest.placeholder
   const error = !!fieldState.error || rest.error
 
   return (
@@ -19,6 +18,7 @@ export function MyTextField(props: MyTextFieldProps) {
       {...rest}
       {...register(name)}
       placeholder={placeholder}
+      helperText={fieldError?.message}
       error={error}
     />
   )

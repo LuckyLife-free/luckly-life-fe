@@ -7,7 +7,7 @@ import {
 import {useToken} from '@/helpers'
 import {LockReset} from '@mui/icons-material'
 import {Avatar, Box, Button, Typography} from '@mui/material'
-import {SubmitHandler} from 'react-hook-form'
+import validator from 'validator'
 import {ValidationCodeField} from './code'
 
 type FormShape = LogonByEmailMutationVariables
@@ -16,19 +16,22 @@ export function Reset() {
   const [, setToken] = useToken()
   const [loginMutation] = useLoginByEmailMutation()
   const [resetMutation] = useResetPasswordByEmailMutation()
-  const handleSubmit: SubmitHandler<FormShape> = async (data) => {
-    const resetResult = await resetMutation({
-      variables: data,
+  const handleSubmit = async (props: FormShape) => {
+    resetMutation({
+      variables: props,
+      onError() {
+        alert({message: '邮箱或验证码错误'})
+      },
+      async onCompleted() {
+        const result = await loginMutation({
+          variables: props,
+        })
+        if (result.data?.loginByEmail) {
+          setToken(result.data.loginByEmail.token)
+          window.location.reload()
+        }
+      },
     })
-    if (resetResult.data?.resetPasswordByEmail) {
-      const result = await loginMutation({
-        variables: data,
-      })
-      if (result.data?.loginByEmail) {
-        setToken(result.data.loginByEmail.token)
-        window.location.reload()
-      }
-    }
   }
 
   return (
@@ -58,6 +61,7 @@ export function Reset() {
             name="email"
             autoComplete="email"
             autoFocus
+            validate={validator.isEmail}
           />
           <MyTextField
             margin="normal"

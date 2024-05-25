@@ -1,4 +1,4 @@
-import {useToken} from '@/helpers'
+import {useSnackbar, useToken} from '@/helpers'
 import {
   ApolloClient,
   HttpLink,
@@ -22,6 +22,7 @@ const HOST = (import.meta as any).env.VITE_HOST
 const httpLink = new HttpLink({uri: GRAPHQL_SERVER})
 
 function useClient() {
+  const [, setSnackbar] = useSnackbar()
   const [token, , clear] = useToken()
   const wsLink = new GraphQLWsLink(
     createClient({
@@ -41,16 +42,16 @@ function useClient() {
     }
   })
   const errorLink = onError(({graphQLErrors, networkError}) => {
-    if (graphQLErrors || networkError) {
-      console.error(graphQLErrors || networkError)
+    if (graphQLErrors) {
       if (
         graphQLErrors?.some(
           ({extensions}) => extensions.code === 'AUTHENTICATION_ERROR'
         )
       ) {
         clear()
-        window.location.pathname = '/'
       }
+    } else if (networkError) {
+      setSnackbar({message: '网络错误'})
     }
   })
   const networkLink = split(

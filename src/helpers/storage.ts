@@ -1,4 +1,4 @@
-import {useCallback} from 'react'
+import {ReactNode, useCallback} from 'react'
 import {createGlobalState, useLocalStorage} from 'react-use'
 
 export const useToken = function () {
@@ -23,3 +23,7 @@ export const useBottomTab = createGlobalState<'home' | 'publish' | 'search'>(
 )
 
 export const useSearch = createGlobalState<string>('')
+
+export const useSnackbar = createGlobalState<{message: ReactNode}>({
+  message: '',
+})

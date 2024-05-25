@@ -6,7 +6,7 @@ import {
 import {useToken} from '@/helpers'
 import {PersonAdd} from '@mui/icons-material'
 import {Avatar, Box, Button, Typography} from '@mui/material'
-import {SubmitHandler} from 'react-hook-form'
+import validator from 'validator'
 import {ValidationCodeField} from './code'
 
 type FormShape = LogonByEmailMutationVariables
@@ -14,14 +14,17 @@ type FormShape = LogonByEmailMutationVariables
 export function Logon() {
   const [, setToken] = useToken()
   const [logonMutation] = useLogonByEmailMutation()
-  const handleSubmit: SubmitHandler<FormShape> = async (data) => {
-    const result = await logonMutation({
-      variables: data,
+  const handleSubmit = async (props: FormShape) => {
+    logonMutation({
+      variables: props,
+      onError() {
+        alert({message: '邮箱或验证码错误'})
+      },
+      onCompleted(data) {
+        setToken(data.logonByEmail.token)
+        window.location.reload()
+      },
     })
-    if (result.data?.logonByEmail) {
-      setToken(result.data.logonByEmail.token)
-      window.location.reload()
-    }
   }
 
   return (
@@ -51,6 +54,7 @@ export function Logon() {
             name="email"
             autoComplete="email"
             autoFocus
+            validate={validator.isEmail}
           />
           <MyTextField
             margin="normal"
