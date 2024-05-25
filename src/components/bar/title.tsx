@@ -35,7 +35,7 @@ export function TitleBar(props: TitleBarProps) {
         sx={(t) => ({
           top: 0,
           zIndex: 10,
-          position: 'absolute',
+          position: 'fixed',
           transition: 'all .5s',
           bgcolor: t.palette.grey[50],
           opacity: barHidden ? 0 : 1,

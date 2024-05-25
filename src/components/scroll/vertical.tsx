@@ -8,6 +8,7 @@ const loadingHeight = 100
 const triggerDistance = 50
 
 type SlidingContainerProps = {
+  scrollRef?: RefObject<HTMLElement>
   onScrollToTop?: AnyFunction
   onScrollToBottom?: AnyFunction
   children: ReactNode
@@ -60,11 +61,12 @@ function usePressDistance(props: {
 
 export function VerticalSliding(props: SlidingContainerProps) {
   const {children, loading, ...rest} = props
-  const ref = useRef<HTMLElement>(null)
+  const localRef = useRef<HTMLElement>(null)
   const loadingRef = useRef<HTMLElement>(null)
-  const {distance, touchend} = usePressDistance({ref, ...rest})
+  const ref = props.scrollRef || localRef
   const [top, setTop] = useState(-loadingHeight)
   const [height, setHeight] = useState<Meta>('100%')
+  const {distance, touchend} = usePressDistance({ref, ...rest})
   const targets = useRef({value: top})
 
   useUpdateEffect(() => {
@@ -93,7 +95,7 @@ export function VerticalSliding(props: SlidingContainerProps) {
     if (ref.current) {
       setHeight(window.innerHeight - ref.current.offsetTop)
     }
-  }, [])
+  }, [ref])
 
   return (
     <Box ref={ref} height={height} position="relative" overflow="auto">

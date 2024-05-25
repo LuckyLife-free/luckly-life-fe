@@ -21,7 +21,7 @@ import {HomePageCard} from './card'
 export function HomePage() {
   const navigate = useNavigate()
   const tagId = useSearchParam('tagId')
-  const {barHidden} = useTitleBar()
+  const {ref, barHidden} = useTitleBar()
   const {data: tagData} = useTagQuery({
     variables: {filter: {id: tagId!}},
     skip: !tagId,
@@ -61,6 +61,7 @@ export function HomePage() {
   return (
     <WithBottomBar>
       <VerticalSliding
+        scrollRef={ref}
         loading={
           articleLoading || latestLoading || activityLoading || userLoading
         }
