@@ -16,7 +16,7 @@ export function SearchPage() {
           <SearchInput />
         </Stack>
       </TitleBar>
-      <Grid flex={1} container overflow="auto" padding={3} spacing={2}>
+      <Grid container overflow="auto" padding={3} spacing={2}>
         {tagData?.tagList.map((d) => (
           <Grid item xs={6} key={d.id}>
             <Stack

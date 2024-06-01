@@ -2,8 +2,12 @@ import {useBottomTab} from '@/helpers'
 import {
   AddCircle,
   AddCircleOutline,
+  Article,
+  ArticleOutlined,
   Home,
   HomeOutlined,
+  Person,
+  PersonOutlined,
   Search,
 } from '@mui/icons-material'
 import {BottomNavigation, BottomNavigationAction, Stack} from '@mui/material'
@@ -38,13 +42,23 @@ export function WithBottomBar(props: WithBottomBarProps) {
         showLabels
         value={value}
         onChange={(_, newValue) => setValue(newValue)}
-        sx={{borderTop: (t) => `1px solid ${t.palette.divider}`, flexShrink: 0}}
+        sx={{
+          borderTop: (t) => `1px solid ${t.palette.divider}`,
+          position: 'sticky',
+          bottom: 0,
+        }}
       >
         <BottomNavigationAction
           label="主页"
           value="home"
           icon={value === 'home' ? <Home /> : <HomeOutlined />}
           onClick={() => (onClickMenu?.(), navigate('/home'))}
+        />
+        <BottomNavigationAction
+          label="征文"
+          value="activity"
+          icon={value === 'activity' ? <Article /> : <ArticleOutlined />}
+          onClick={() => (onClickMenu?.(), navigate('/activity'))}
         />
         <BottomNavigationAction
           label="发布"
@@ -57,6 +71,12 @@ export function WithBottomBar(props: WithBottomBarProps) {
           value="search"
           icon={<Search />}
           onClick={() => (onClickMenu?.(), navigate('/search'))}
+        />
+        <BottomNavigationAction
+          label="我的"
+          value="me"
+          icon={value === 'me' ? <Person /> : <PersonOutlined />}
+          onClick={() => (onClickMenu?.(), navigate('/me'))}
         />
       </BottomNavigation>
     </Stack>

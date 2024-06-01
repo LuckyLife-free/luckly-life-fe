@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import {useNavigate, useSearchParams} from 'react-router-dom'
-import {ArticleList} from '../list/article'
+import {ScrollableArticleList} from '../list/article'
 
 export function UserDetail() {
   const navigate = useNavigate()
@@ -40,7 +40,7 @@ export function UserDetail() {
       </Stack>
       <Divider />
       <Stack p={2} pb={0}>
-        <ArticleList latest authors={[{id: params.get('id')!}]} />
+        <ScrollableArticleList latest authors={[{id: params.get('id')!}]} />
       </Stack>
     </WithTitleBar>
   )

@@ -18,9 +18,9 @@ export const useRecentSearch = function () {
   return [searches, addSearch] as const
 }
 
-export const useBottomTab = createGlobalState<'home' | 'publish' | 'search'>(
-  'home'
-)
+export const useBottomTab = createGlobalState<
+  'home' | 'publish' | 'search' | 'activity' | 'me'
+>('home')
 
 export const useSearch = createGlobalState<string>('')
 
