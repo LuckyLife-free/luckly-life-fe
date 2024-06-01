@@ -36,7 +36,7 @@ export function WithBottomBar(props: WithBottomBarProps) {
   })
 
   return (
-    <Stack height={window.innerHeight}>
+    <Stack height={window.innerHeight} justifyContent="space-between">
       {children}
       <BottomNavigation
         showLabels
@@ -45,6 +45,8 @@ export function WithBottomBar(props: WithBottomBarProps) {
         sx={{
           borderTop: (t) => `1px solid ${t.palette.divider}`,
           position: 'sticky',
+          flexShrink: 0,
+          zIndex: 1,
           bottom: 0,
         }}
       >
