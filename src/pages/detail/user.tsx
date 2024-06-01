@@ -26,7 +26,7 @@ export function UserDetail() {
         </IconButton>
       }
     >
-      <Stack p={3} spacing={1} alignItems="center">
+      <Stack height={250} p={3} spacing={1} alignItems="center">
         <Avatar
           sx={{width: 100, height: 100}}
           src={userData?.user?.avatar?.url}
@@ -39,8 +39,8 @@ export function UserDetail() {
         </Button>
       </Stack>
       <Divider />
-      <Stack p={2}>
-        <ArticleList authors={[{id: params.get('id')!}]} />
+      <Stack p={2} pb={0}>
+        <ArticleList latest authors={[{id: params.get('id')!}]} />
       </Stack>
     </WithTitleBar>
   )

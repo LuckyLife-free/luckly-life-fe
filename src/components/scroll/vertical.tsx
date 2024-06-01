@@ -5,7 +5,7 @@ import {useEvent, useScroll, useToggle, useUpdateEffect} from 'react-use'
 import {AsyncStatus} from '../status'
 
 const loadingHeight = 100
-const triggerDistance = 50
+const triggerDistance = 30
 
 type SlidingContainerProps = {
   scrollRef?: RefObject<HTMLElement>
