@@ -1,3 +1,21 @@
+fragment ArticleListItem on Article {
+  author {
+    name
+  }
+  cover {
+    name
+    url
+  }
+  createTime
+  id
+  summary
+  tags {
+    name
+  }
+  title
+  updateTime
+}
+
 mutation CreateArticle($input: CreateArticleInput!) {
   createArticle(input: $input)
 }
@@ -29,21 +47,19 @@ query Article($id: String!) {
 
 query ArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
   articleList(filter: $filter, limit: $limit, offset: $offset) {
-    author {
-      name
-    }
-    cover {
-      name
-      url
-    }
-    createTime
-    id
-    summary
-    tags {
-      name
-    }
-    title
-    updateTime
+    ...ArticleListItem
+  }
+}
+
+query MyArticleList($filter: SearchInput, $limit: Int, $offset: Int) {
+  myArticleList(filter: $filter, limit: $limit, offset: $offset) {
+    ...ArticleListItem
+  }
+}
+
+query MyStarArticleList($filter: SearchInput, $limit: Int, $offset: Int) {
+  myStarArticleList(filter: $filter, limit: $limit, offset: $offset) {
+    ...ArticleListItem
   }
 }
 
@@ -61,4 +77,16 @@ query Tag($filter: TagInput!) {
     name
     type
   }
+}
+
+mutation StarArticle($input: IdInput!) {
+  starArticle(input: $input)
+}
+
+mutation UnStarArticle($input: IdInput!) {
+  unStarArticle(input: $input)
+}
+
+query IsStaredArticle($filter: IdInput!) {
+  isStaredArticle(filter: $filter)
 }

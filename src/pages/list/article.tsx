@@ -1,53 +1,12 @@
-import cover from '@/assets/cover.jpg'
-import {VerticalSliding} from '@/components'
-import {
-  ArticleListInput,
-  ArticleListQueryResult,
-  useArticleListLazyQuery,
-} from '@/generated'
-import {ListQuery, useListData} from '@/helpers'
+import {ArticleListItemFragment} from '@/generated'
+import {defaultCover} from '@/helpers'
 import {ChevronRightOutlined} from '@mui/icons-material'
 import {Avatar, IconButton, Stack, Typography} from '@mui/material'
 import {format} from 'date-fns'
-import {Fragment, useCallback} from 'react'
+import {Fragment} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useEffectOnce} from 'react-use'
 
-type ArticleListProps = ArticleListInput
-
-type Datum = NonNullable<ArticleListQueryResult['data']>['articleList'][number]
-
-export function ScrollableArticleList(props: ArticleListProps) {
-  const [query, {loading}] = useArticleListLazyQuery({
-    variables: {filter: props, limit: 18},
-  })
-  const listQuery = useCallback<ListQuery<Datum>>(
-    async (pagination) => {
-      const {data} = await query({variables: {...pagination}})
-      return data?.articleList ?? []
-    },
-    [query]
-  )
-  const {reloadList, fetchMore, data} = useListData(listQuery)
-
-  useEffectOnce(() => {
-    reloadList()
-  })
-
-  return (
-    <VerticalSliding
-      onScrollToTop={reloadList}
-      onScrollToBottom={fetchMore}
-      loading={loading}
-    >
-      <Stack spacing={2} mb={2}>
-        <ArticleList data={data} />
-      </Stack>
-    </VerticalSliding>
-  )
-}
-
-export function ArticleList(props: {data: Datum[]}) {
+export function ArticleList(props: {data: ArticleListItemFragment[]}) {
   const navigate = useNavigate()
 
   return (
@@ -63,7 +22,7 @@ export function ArticleList(props: {data: Datum[]}) {
         >
           <Avatar
             variant="rounded"
-            src={d.cover?.url || cover}
+            src={d.cover?.url || defaultCover}
             sx={{width: '30vw', height: '20vw'}}
           >
             {d.cover?.name}

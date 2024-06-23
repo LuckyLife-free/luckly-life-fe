@@ -1,6 +1,6 @@
-import cover from '@/assets/cover.jpg'
 import {TitleBar, WithBottomBar} from '@/components'
 import {useTagListQuery} from '@/generated'
+import {defaultCover} from '@/helpers'
 import {Avatar, Grid, Stack, Typography} from '@mui/material'
 import {useNavigate} from 'react-router-dom'
 import {SearchInput} from './input'
@@ -26,7 +26,7 @@ export function SearchPage() {
             >
               <Avatar
                 variant="rounded"
-                src={cover}
+                src={defaultCover}
                 sx={{width: '100%', height: '100%'}}
               >
                 {d.name}

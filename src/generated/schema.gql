@@ -211,6 +211,11 @@ type Mutation {
   删除文章帖子
   """
   deleteArticle(input: IdInput!): Boolean!
+
+  """
+  关注用户
+  """
+  followUser(input: IdInput!): Boolean!
   loginByEmail(email: String!, password: String!): AuthInfo!
   logonByEmail(
     email: String!
@@ -226,12 +231,17 @@ type Mutation {
   sendEmailVerificationCode(email: String!): Boolean
 
   """
-  喜欢文章帖子
+  收藏文章
   """
   starArticle(input: IdInput!): Boolean!
 
   """
-  取消喜欢文章帖子
+  取消关注用户
+  """
+  unFollowUser(input: IdInput!): Boolean!
+
+  """
+  取消收藏文章
   """
   unStarArticle(input: IdInput!): Boolean!
 
@@ -269,6 +279,16 @@ type Query {
   hello: String!
 
   """
+  是否关注某用户
+  """
+  isFollowedUser(filter: IdInput!): Boolean!
+
+  """
+  是否收藏某文章
+  """
+  isStaredArticle(filter: IdInput!): Boolean!
+
+  """
   获取当前用户信息
   """
   me: User
@@ -279,7 +299,12 @@ type Query {
   myArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
 
   """
-  我喜欢的文章
+  我关注的用户
+  """
+  myFollowedUserList(filter: SearchInput, limit: Int, offset: Int): [User!]!
+
+  """
+  我收藏的文章
   """
   myStarArticleList(filter: SearchInput, limit: Int, offset: Int): [Article!]!
 

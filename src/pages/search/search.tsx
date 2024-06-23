@@ -4,8 +4,8 @@ import {ArrowBackRounded} from '@mui/icons-material'
 import {Box, IconButton, Stack, Typography} from '@mui/material'
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {ScrollableActivityList} from '../list/activity'
-import {ScrollableArticleList} from '../list/article'
+import {ScrollableActivityList} from './activity'
+import {ScrollableArticleList} from './article'
 import {SearchInput} from './input'
 
 const TabData = [
@@ -62,9 +62,9 @@ export function SearchResult() {
           <MyTabs tabs={TabData} sx={{mb: 2, mt: 1}}>
             {({tab}) =>
               tab === '1' ? (
-                <ScrollableArticleList search={search} latest />
+                <ScrollableArticleList key="latest" search={search} latest />
               ) : tab === '2' ? (
-                <ScrollableArticleList search={search} />
+                <ScrollableArticleList key="hot" search={search} />
               ) : tab === '3' ? (
                 <ScrollableActivityList search={search} />
               ) : null

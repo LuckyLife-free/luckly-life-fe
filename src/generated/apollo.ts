@@ -130,6 +130,17 @@ export type UpdateMeInput = {
   signature?: InputMaybe<Scalars['String']>
 }
 
+export type ActivityListItemFragment = {
+  __typename?: 'Activity'
+  description: string
+  endTime: number
+  id: string
+  startTime: number
+  title: string
+  cover?: {__typename?: 'Image'; name: string; url: string} | null
+  tag?: {__typename?: 'Tag'; name: string} | null
+}
+
 export type ActivityListQueryVariables = Exact<{
   filter?: InputMaybe<ActivityListInput>
   limit?: InputMaybe<Scalars['Int']>
@@ -148,6 +159,18 @@ export type ActivityListQuery = {
     cover?: {__typename?: 'Image'; name: string; url: string} | null
     tag?: {__typename?: 'Tag'; name: string} | null
   }>
+}
+
+export type ArticleListItemFragment = {
+  __typename?: 'Article'
+  createTime: number
+  id: string
+  summary: string
+  title: string
+  updateTime: number
+  author: {__typename?: 'User'; name: string}
+  cover?: {__typename?: 'Image'; name: string; url: string} | null
+  tags: Array<{__typename?: 'Tag'; name: string} | null>
 }
 
 export type CreateArticleMutationVariables = Exact<{
@@ -220,6 +243,48 @@ export type ArticleListQuery = {
   }>
 }
 
+export type MyArticleListQueryVariables = Exact<{
+  filter?: InputMaybe<SearchInput>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+}>
+
+export type MyArticleListQuery = {
+  __typename?: 'Query'
+  myArticleList: Array<{
+    __typename?: 'Article'
+    createTime: number
+    id: string
+    summary: string
+    title: string
+    updateTime: number
+    author: {__typename?: 'User'; name: string}
+    cover?: {__typename?: 'Image'; name: string; url: string} | null
+    tags: Array<{__typename?: 'Tag'; name: string} | null>
+  }>
+}
+
+export type MyStarArticleListQueryVariables = Exact<{
+  filter?: InputMaybe<SearchInput>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+}>
+
+export type MyStarArticleListQuery = {
+  __typename?: 'Query'
+  myStarArticleList: Array<{
+    __typename?: 'Article'
+    createTime: number
+    id: string
+    summary: string
+    title: string
+    updateTime: number
+    author: {__typename?: 'User'; name: string}
+    cover?: {__typename?: 'Image'; name: string; url: string} | null
+    tags: Array<{__typename?: 'Tag'; name: string} | null>
+  }>
+}
+
 export type TagListQueryVariables = Exact<{
   filter?: InputMaybe<TagListInput>
   limit?: InputMaybe<Scalars['Int']>
@@ -238,6 +303,33 @@ export type TagQueryVariables = Exact<{
 export type TagQuery = {
   __typename?: 'Query'
   tag?: {__typename?: 'Tag'; id: string; name: string; type: TagType} | null
+}
+
+export type StarArticleMutationVariables = Exact<{
+  input: IdInput
+}>
+
+export type StarArticleMutation = {
+  __typename?: 'Mutation'
+  starArticle: boolean
+}
+
+export type UnStarArticleMutationVariables = Exact<{
+  input: IdInput
+}>
+
+export type UnStarArticleMutation = {
+  __typename?: 'Mutation'
+  unStarArticle: boolean
+}
+
+export type IsStaredArticleQueryVariables = Exact<{
+  filter: IdInput
+}>
+
+export type IsStaredArticleQuery = {
+  __typename?: 'Query'
+  isStaredArticle: boolean
 }
 
 export type LoginByEmailMutationVariables = Exact<{
@@ -281,6 +373,27 @@ export type ResetPasswordByEmailMutation = {
   resetPasswordByEmail: boolean
 }
 
+export type BaseUserFragment = {
+  __typename?: 'User'
+  id: string
+  name: string
+  signature?: string | null
+  avatar?: {__typename?: 'Image'; name: string; url: string} | null
+}
+
+export type MeQueryVariables = Exact<{[key: string]: never}>
+
+export type MeQuery = {
+  __typename?: 'Query'
+  me?: {
+    __typename?: 'User'
+    id: string
+    name: string
+    signature?: string | null
+    avatar?: {__typename?: 'Image'; name: string; url: string} | null
+  } | null
+}
+
 export type UserQueryVariables = Exact<{
   id: Scalars['String']
 }>
@@ -313,23 +426,100 @@ export type UserListQuery = {
   }>
 }
 
+export type MyFollowedUserListQueryVariables = Exact<{
+  filter?: InputMaybe<SearchInput>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+}>
+
+export type MyFollowedUserListQuery = {
+  __typename?: 'Query'
+  myFollowedUserList: Array<{
+    __typename?: 'User'
+    id: string
+    name: string
+    signature?: string | null
+    avatar?: {__typename?: 'Image'; name: string; url: string} | null
+  }>
+}
+
+export type FollowUserMutationVariables = Exact<{
+  input: IdInput
+}>
+
+export type FollowUserMutation = {__typename?: 'Mutation'; followUser: boolean}
+
+export type UnFollowUserMutationVariables = Exact<{
+  input: IdInput
+}>
+
+export type UnFollowUserMutation = {
+  __typename?: 'Mutation'
+  unFollowUser: boolean
+}
+
+export type IsFollowedUserQueryVariables = Exact<{
+  filter: IdInput
+}>
+
+export type IsFollowedUserQuery = {
+  __typename?: 'Query'
+  isFollowedUser: boolean
+}
+
+export const ActivityListItemFragmentDoc = gql`
+  fragment ActivityListItem on Activity {
+    cover {
+      name
+      url
+    }
+    description
+    endTime
+    id
+    startTime
+    tag {
+      name
+    }
+    title
+  }
+`
+export const ArticleListItemFragmentDoc = gql`
+  fragment ArticleListItem on Article {
+    author {
+      name
+    }
+    cover {
+      name
+      url
+    }
+    createTime
+    id
+    summary
+    tags {
+      name
+    }
+    title
+    updateTime
+  }
+`
+export const BaseUserFragmentDoc = gql`
+  fragment BaseUser on User {
+    id
+    avatar {
+      name
+      url
+    }
+    name
+    signature
+  }
+`
 export const ActivityListDocument = gql`
   query ActivityList($filter: ActivityListInput, $limit: Int, $offset: Int) {
     activityList(filter: $filter, limit: $limit, offset: $offset) {
-      cover {
-        name
-        url
-      }
-      description
-      endTime
-      id
-      startTime
-      tag {
-        name
-      }
-      title
+      ...ActivityListItem
     }
   }
+  ${ActivityListItemFragmentDoc}
 `
 
 /**
@@ -590,23 +780,10 @@ export type ArticleQueryResult = Apollo.QueryResult<
 export const ArticleListDocument = gql`
   query ArticleList($filter: ArticleListInput, $limit: Int, $offset: Int) {
     articleList(filter: $filter, limit: $limit, offset: $offset) {
-      author {
-        name
-      }
-      cover {
-        name
-        url
-      }
-      createTime
-      id
-      summary
-      tags {
-        name
-      }
-      title
-      updateTime
+      ...ArticleListItem
     }
   }
+  ${ArticleListItemFragmentDoc}
 `
 
 /**
@@ -658,6 +835,128 @@ export type ArticleListLazyQueryHookResult = ReturnType<
 export type ArticleListQueryResult = Apollo.QueryResult<
   ArticleListQuery,
   ArticleListQueryVariables
+>
+export const MyArticleListDocument = gql`
+  query MyArticleList($filter: SearchInput, $limit: Int, $offset: Int) {
+    myArticleList(filter: $filter, limit: $limit, offset: $offset) {
+      ...ArticleListItem
+    }
+  }
+  ${ArticleListItemFragmentDoc}
+`
+
+/**
+ * __useMyArticleListQuery__
+ *
+ * To run a query within a React component, call `useMyArticleListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyArticleListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyArticleListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useMyArticleListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    MyArticleListQuery,
+    MyArticleListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<MyArticleListQuery, MyArticleListQueryVariables>(
+    MyArticleListDocument,
+    options
+  )
+}
+export function useMyArticleListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MyArticleListQuery,
+    MyArticleListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<MyArticleListQuery, MyArticleListQueryVariables>(
+    MyArticleListDocument,
+    options
+  )
+}
+export type MyArticleListQueryHookResult = ReturnType<
+  typeof useMyArticleListQuery
+>
+export type MyArticleListLazyQueryHookResult = ReturnType<
+  typeof useMyArticleListLazyQuery
+>
+export type MyArticleListQueryResult = Apollo.QueryResult<
+  MyArticleListQuery,
+  MyArticleListQueryVariables
+>
+export const MyStarArticleListDocument = gql`
+  query MyStarArticleList($filter: SearchInput, $limit: Int, $offset: Int) {
+    myStarArticleList(filter: $filter, limit: $limit, offset: $offset) {
+      ...ArticleListItem
+    }
+  }
+  ${ArticleListItemFragmentDoc}
+`
+
+/**
+ * __useMyStarArticleListQuery__
+ *
+ * To run a query within a React component, call `useMyStarArticleListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyStarArticleListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyStarArticleListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useMyStarArticleListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    MyStarArticleListQuery,
+    MyStarArticleListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<
+    MyStarArticleListQuery,
+    MyStarArticleListQueryVariables
+  >(MyStarArticleListDocument, options)
+}
+export function useMyStarArticleListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MyStarArticleListQuery,
+    MyStarArticleListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<
+    MyStarArticleListQuery,
+    MyStarArticleListQueryVariables
+  >(MyStarArticleListDocument, options)
+}
+export type MyStarArticleListQueryHookResult = ReturnType<
+  typeof useMyStarArticleListQuery
+>
+export type MyStarArticleListLazyQueryHookResult = ReturnType<
+  typeof useMyStarArticleListLazyQuery
+>
+export type MyStarArticleListQueryResult = Apollo.QueryResult<
+  MyStarArticleListQuery,
+  MyStarArticleListQueryVariables
 >
 export const TagListDocument = gql`
   query TagList($filter: TagListInput, $limit: Int, $offset: Int) {
@@ -752,6 +1051,158 @@ export function useTagLazyQuery(
 export type TagQueryHookResult = ReturnType<typeof useTagQuery>
 export type TagLazyQueryHookResult = ReturnType<typeof useTagLazyQuery>
 export type TagQueryResult = Apollo.QueryResult<TagQuery, TagQueryVariables>
+export const StarArticleDocument = gql`
+  mutation StarArticle($input: IdInput!) {
+    starArticle(input: $input)
+  }
+`
+export type StarArticleMutationFn = Apollo.MutationFunction<
+  StarArticleMutation,
+  StarArticleMutationVariables
+>
+
+/**
+ * __useStarArticleMutation__
+ *
+ * To run a mutation, you first call `useStarArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStarArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [starArticleMutation, { data, loading, error }] = useStarArticleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useStarArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StarArticleMutation,
+    StarArticleMutationVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<StarArticleMutation, StarArticleMutationVariables>(
+    StarArticleDocument,
+    options
+  )
+}
+export type StarArticleMutationHookResult = ReturnType<
+  typeof useStarArticleMutation
+>
+export type StarArticleMutationResult =
+  Apollo.MutationResult<StarArticleMutation>
+export type StarArticleMutationOptions = Apollo.BaseMutationOptions<
+  StarArticleMutation,
+  StarArticleMutationVariables
+>
+export const UnStarArticleDocument = gql`
+  mutation UnStarArticle($input: IdInput!) {
+    unStarArticle(input: $input)
+  }
+`
+export type UnStarArticleMutationFn = Apollo.MutationFunction<
+  UnStarArticleMutation,
+  UnStarArticleMutationVariables
+>
+
+/**
+ * __useUnStarArticleMutation__
+ *
+ * To run a mutation, you first call `useUnStarArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnStarArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unStarArticleMutation, { data, loading, error }] = useUnStarArticleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUnStarArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnStarArticleMutation,
+    UnStarArticleMutationVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<
+    UnStarArticleMutation,
+    UnStarArticleMutationVariables
+  >(UnStarArticleDocument, options)
+}
+export type UnStarArticleMutationHookResult = ReturnType<
+  typeof useUnStarArticleMutation
+>
+export type UnStarArticleMutationResult =
+  Apollo.MutationResult<UnStarArticleMutation>
+export type UnStarArticleMutationOptions = Apollo.BaseMutationOptions<
+  UnStarArticleMutation,
+  UnStarArticleMutationVariables
+>
+export const IsStaredArticleDocument = gql`
+  query IsStaredArticle($filter: IdInput!) {
+    isStaredArticle(filter: $filter)
+  }
+`
+
+/**
+ * __useIsStaredArticleQuery__
+ *
+ * To run a query within a React component, call `useIsStaredArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsStaredArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsStaredArticleQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useIsStaredArticleQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    IsStaredArticleQuery,
+    IsStaredArticleQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<IsStaredArticleQuery, IsStaredArticleQueryVariables>(
+    IsStaredArticleDocument,
+    options
+  )
+}
+export function useIsStaredArticleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    IsStaredArticleQuery,
+    IsStaredArticleQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<
+    IsStaredArticleQuery,
+    IsStaredArticleQueryVariables
+  >(IsStaredArticleDocument, options)
+}
+export type IsStaredArticleQueryHookResult = ReturnType<
+  typeof useIsStaredArticleQuery
+>
+export type IsStaredArticleLazyQueryHookResult = ReturnType<
+  typeof useIsStaredArticleLazyQuery
+>
+export type IsStaredArticleQueryResult = Apollo.QueryResult<
+  IsStaredArticleQuery,
+  IsStaredArticleQueryVariables
+>
 export const LoginByEmailDocument = gql`
   mutation LoginByEmail($email: String!, $password: String!) {
     loginByEmail(email: $email, password: $password) {
@@ -972,18 +1423,52 @@ export type ResetPasswordByEmailMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordByEmailMutation,
   ResetPasswordByEmailMutationVariables
 >
+export const MeDocument = gql`
+  query Me {
+    me {
+      ...BaseUser
+    }
+  }
+  ${BaseUserFragmentDoc}
+`
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(
+  baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options)
+}
+export function useMeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options)
+}
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>
 export const UserDocument = gql`
   query User($id: String!) {
     user(id: $id) {
-      id
-      avatar {
-        name
-        url
-      }
-      name
-      signature
+      ...BaseUser
     }
   }
+  ${BaseUserFragmentDoc}
 `
 
 /**
@@ -1023,15 +1508,10 @@ export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>
 export const UserListDocument = gql`
   query UserList($filter: SearchInput, $limit: Int, $offset: Int) {
     userList(filter: $filter, limit: $limit, offset: $offset) {
-      id
-      avatar {
-        name
-        url
-      }
-      name
-      signature
+      ...BaseUser
     }
   }
+  ${BaseUserFragmentDoc}
 `
 
 /**
@@ -1080,4 +1560,216 @@ export type UserListLazyQueryHookResult = ReturnType<
 export type UserListQueryResult = Apollo.QueryResult<
   UserListQuery,
   UserListQueryVariables
+>
+export const MyFollowedUserListDocument = gql`
+  query MyFollowedUserList($filter: SearchInput, $limit: Int, $offset: Int) {
+    myFollowedUserList(filter: $filter, limit: $limit, offset: $offset) {
+      ...BaseUser
+    }
+  }
+  ${BaseUserFragmentDoc}
+`
+
+/**
+ * __useMyFollowedUserListQuery__
+ *
+ * To run a query within a React component, call `useMyFollowedUserListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyFollowedUserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyFollowedUserListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useMyFollowedUserListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    MyFollowedUserListQuery,
+    MyFollowedUserListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<
+    MyFollowedUserListQuery,
+    MyFollowedUserListQueryVariables
+  >(MyFollowedUserListDocument, options)
+}
+export function useMyFollowedUserListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MyFollowedUserListQuery,
+    MyFollowedUserListQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<
+    MyFollowedUserListQuery,
+    MyFollowedUserListQueryVariables
+  >(MyFollowedUserListDocument, options)
+}
+export type MyFollowedUserListQueryHookResult = ReturnType<
+  typeof useMyFollowedUserListQuery
+>
+export type MyFollowedUserListLazyQueryHookResult = ReturnType<
+  typeof useMyFollowedUserListLazyQuery
+>
+export type MyFollowedUserListQueryResult = Apollo.QueryResult<
+  MyFollowedUserListQuery,
+  MyFollowedUserListQueryVariables
+>
+export const FollowUserDocument = gql`
+  mutation FollowUser($input: IdInput!) {
+    followUser(input: $input)
+  }
+`
+export type FollowUserMutationFn = Apollo.MutationFunction<
+  FollowUserMutation,
+  FollowUserMutationVariables
+>
+
+/**
+ * __useFollowUserMutation__
+ *
+ * To run a mutation, you first call `useFollowUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFollowUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [followUserMutation, { data, loading, error }] = useFollowUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFollowUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    FollowUserMutation,
+    FollowUserMutationVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<FollowUserMutation, FollowUserMutationVariables>(
+    FollowUserDocument,
+    options
+  )
+}
+export type FollowUserMutationHookResult = ReturnType<
+  typeof useFollowUserMutation
+>
+export type FollowUserMutationResult = Apollo.MutationResult<FollowUserMutation>
+export type FollowUserMutationOptions = Apollo.BaseMutationOptions<
+  FollowUserMutation,
+  FollowUserMutationVariables
+>
+export const UnFollowUserDocument = gql`
+  mutation UnFollowUser($input: IdInput!) {
+    unFollowUser(input: $input)
+  }
+`
+export type UnFollowUserMutationFn = Apollo.MutationFunction<
+  UnFollowUserMutation,
+  UnFollowUserMutationVariables
+>
+
+/**
+ * __useUnFollowUserMutation__
+ *
+ * To run a mutation, you first call `useUnFollowUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnFollowUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unFollowUserMutation, { data, loading, error }] = useUnFollowUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUnFollowUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnFollowUserMutation,
+    UnFollowUserMutationVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<
+    UnFollowUserMutation,
+    UnFollowUserMutationVariables
+  >(UnFollowUserDocument, options)
+}
+export type UnFollowUserMutationHookResult = ReturnType<
+  typeof useUnFollowUserMutation
+>
+export type UnFollowUserMutationResult =
+  Apollo.MutationResult<UnFollowUserMutation>
+export type UnFollowUserMutationOptions = Apollo.BaseMutationOptions<
+  UnFollowUserMutation,
+  UnFollowUserMutationVariables
+>
+export const IsFollowedUserDocument = gql`
+  query IsFollowedUser($filter: IdInput!) {
+    isFollowedUser(filter: $filter)
+  }
+`
+
+/**
+ * __useIsFollowedUserQuery__
+ *
+ * To run a query within a React component, call `useIsFollowedUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsFollowedUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsFollowedUserQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useIsFollowedUserQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    IsFollowedUserQuery,
+    IsFollowedUserQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<IsFollowedUserQuery, IsFollowedUserQueryVariables>(
+    IsFollowedUserDocument,
+    options
+  )
+}
+export function useIsFollowedUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    IsFollowedUserQuery,
+    IsFollowedUserQueryVariables
+  >
+) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<IsFollowedUserQuery, IsFollowedUserQueryVariables>(
+    IsFollowedUserDocument,
+    options
+  )
+}
+export type IsFollowedUserQueryHookResult = ReturnType<
+  typeof useIsFollowedUserQuery
+>
+export type IsFollowedUserLazyQueryHookResult = ReturnType<
+  typeof useIsFollowedUserLazyQuery
+>
+export type IsFollowedUserQueryResult = Apollo.QueryResult<
+  IsFollowedUserQuery,
+  IsFollowedUserQueryVariables
 >

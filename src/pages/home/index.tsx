@@ -1,4 +1,3 @@
-import cover from '@/assets/cover.jpg'
 import {
   TitleBar,
   VerticalSliding,
@@ -11,6 +10,7 @@ import {
   useTagQuery,
   useUserListQuery,
 } from '@/generated'
+import {defaultCover} from '@/helpers'
 import {ArrowBackRounded} from '@mui/icons-material'
 import {Avatar, IconButton, Stack, Typography} from '@mui/material'
 import {format} from 'date-fns'
@@ -95,7 +95,7 @@ export function HomePage() {
             <Stack onClick={() => navigate(`/detail/article?id=${d.id}`)}>
               <Avatar
                 variant="rounded"
-                src={d.cover?.url || cover}
+                src={d.cover?.url || defaultCover}
                 sx={{width: '100%', height: 90}}
               >
                 {d.cover?.name}
@@ -126,7 +126,7 @@ export function HomePage() {
             >
               <Avatar
                 variant="rounded"
-                src={d.avatar?.url || cover}
+                src={d.avatar?.url || defaultCover}
                 sx={{width: '100%', height: '27vw'}}
               >
                 {d.avatar?.name}
@@ -156,7 +156,7 @@ export function HomePage() {
             <Stack onClick={() => navigate(`/detail/article?id=${d.id}`)}>
               <Avatar
                 variant="rounded"
-                src={d.cover?.url || cover}
+                src={d.cover?.url || defaultCover}
                 sx={{width: '100%', height: 90}}
               >
                 {d.cover?.name}
@@ -184,7 +184,7 @@ export function HomePage() {
             <Stack>
               <Avatar
                 variant="rounded"
-                src={d.cover?.url || cover}
+                src={d.cover?.url || defaultCover}
                 sx={{width: '100%', height: 90}}
               >
                 {d.cover?.name}

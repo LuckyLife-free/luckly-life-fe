@@ -9,6 +9,9 @@ import {ArticleDetail} from './detail/article'
 import {UserDetail} from './detail/user'
 import {HomePage} from './home'
 import {MePage} from './me'
+import {MyArticlePage} from './me/article'
+import {MyFollowPage} from './me/follow'
+import {MyStarArticlePage} from './me/star'
 import {Publish} from './publish'
 import {SearchPage} from './search'
 import {SearchResult} from './search/search'
@@ -37,13 +40,20 @@ export function RootEntry() {
       <Route path="/login" Component={Login} />
       <Route path="/logon" Component={Logon} />
       <Route path="/reset" Component={Reset} />
+
       <Route path="/home" Component={HomePage} />
       <Route path="/activity" Component={ActivityPage} />
       <Route path="/publish" Component={Publish} />
-      <Route path="/search" Component={SearchPage} />
+
       <Route path="/me" Component={MePage} />
+      <Route path="/me/article" Component={MyArticlePage} />
+      <Route path="/me/follow" Component={MyFollowPage} />
+      <Route path="/me/star" Component={MyStarArticlePage} />
+
+      <Route path="/search" Component={SearchPage} />
       <Route path="/search/home" Component={HomePage} />
       <Route path="/search/result" Component={SearchResult} />
+
       <Route path="/detail/article" Component={ArticleDetail} />
       <Route path="/detail/user" Component={UserDetail} />
     </Routes>

@@ -1,16 +1,11 @@
 import {WithTitleBar} from '@/components'
 import {useUserQuery} from '@/generated'
+import {defaultUser} from '@/helpers'
 import {ArrowBackRounded} from '@mui/icons-material'
-import {
-  Avatar,
-  Button,
-  Divider,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material'
+import {Avatar, Divider, IconButton, Stack, Typography} from '@mui/material'
 import {useNavigate, useSearchParams} from 'react-router-dom'
-import {ScrollableArticleList} from '../list/article'
+import {FollowButton} from '../common/follow'
+import {ScrollableArticleList} from '../search/article'
 
 export function UserDetail() {
   const navigate = useNavigate()
@@ -29,14 +24,12 @@ export function UserDetail() {
       <Stack height={250} p={3} spacing={1} alignItems="center">
         <Avatar
           sx={{width: 100, height: 100}}
-          src={userData?.user?.avatar?.url}
+          src={userData?.user?.avatar?.url ?? defaultUser}
           variant="rounded"
         />
         <Typography>{userData?.user?.name}</Typography>
         <Typography>{userData?.user?.signature}</Typography>
-        <Button size="small" variant="outlined" sx={{ml: 10, p: 0}}>
-          关注
-        </Button>
+        <FollowButton id={params.get('id')!} />
       </Stack>
       <Divider />
       <Stack p={2} pb={0}>

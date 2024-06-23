@@ -1,7 +1,13 @@
 import {Box, Stack} from '@mui/material'
 import anime from 'animejs'
 import {ReactNode, RefObject, useLayoutEffect, useRef, useState} from 'react'
-import {useEvent, useScroll, useToggle, useUpdateEffect} from 'react-use'
+import {
+  useDebounce,
+  useEvent,
+  useScroll,
+  useToggle,
+  useUpdateEffect,
+} from 'react-use'
 import {AsyncStatus} from '../status'
 
 const loadingHeight = 100
@@ -62,26 +68,27 @@ function usePressDistance(props: {
 export function VerticalSliding(props: SlidingContainerProps) {
   const {children, loading, ...rest} = props
   const localRef = useRef<HTMLElement>(null)
-  const loadingRef = useRef<HTMLElement>(null)
   const ref = props.scrollRef || localRef
   const [top, setTop] = useState(-loadingHeight)
   const [height, setHeight] = useState<Meta>('100%')
   const {distance, touchend} = usePressDistance({ref, ...rest})
+  const [debouncedLoading, setLoading] = useState(loading)
   const targets = useRef({value: top})
 
+  useDebounce(() => setLoading(loading), 100, [loading])
+
   useUpdateEffect(() => {
+    anime.remove(targets.current)
     if (touchend) {
       setTop((distance - loadingHeight) * (distance < loadingHeight ? 1 : 0.3))
-    } else if (loading && top !== 0) {
-      anime.remove(targets.current)
+    } else if (debouncedLoading) {
       anime({
         update: () => setTop(targets.current.value),
         targets: targets.current,
         value: [top, 0],
         easing: 'easeOutSine',
       })
-    } else if (!loading && top !== -loadingHeight) {
-      anime.remove(targets.current)
+    } else if (!debouncedLoading) {
       anime({
         update: () => setTop(targets.current.value),
         targets: targets.current,
@@ -89,7 +96,7 @@ export function VerticalSliding(props: SlidingContainerProps) {
         easing: 'easeOutSine',
       })
     }
-  }, [loading, distance, touchend])
+  }, [debouncedLoading, distance, touchend])
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -99,7 +106,7 @@ export function VerticalSliding(props: SlidingContainerProps) {
 
   return (
     <Box ref={ref} height={height} position="relative" overflow="auto">
-      <Stack width="100%" position="absolute" top={top} ref={loadingRef}>
+      <Stack width="100%" position="absolute" top={top}>
         <AsyncStatus loading />
       </Stack>
       {children}

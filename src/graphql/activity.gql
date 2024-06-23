@@ -1,16 +1,20 @@
+fragment ActivityListItem on Activity {
+  cover {
+    name
+    url
+  }
+  description
+  endTime
+  id
+  startTime
+  tag {
+    name
+  }
+  title
+}
+
 query ActivityList($filter: ActivityListInput, $limit: Int, $offset: Int) {
   activityList(filter: $filter, limit: $limit, offset: $offset) {
-    cover {
-      name
-      url
-    }
-    description
-    endTime
-    id
-    startTime
-    tag {
-      name
-    }
-    title
+    ...ActivityListItem
   }
 }

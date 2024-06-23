@@ -1,23 +1,45 @@
+fragment BaseUser on User {
+  id
+  avatar {
+    name
+    url
+  }
+  name
+  signature
+}
+
+query Me {
+  me {
+    ...BaseUser
+  }
+}
+
 query User($id: String!) {
   user(id: $id) {
-    id
-    avatar {
-      name
-      url
-    }
-    name
-    signature
+    ...BaseUser
   }
 }
 
 query UserList($filter: SearchInput, $limit: Int, $offset: Int) {
   userList(filter: $filter, limit: $limit, offset: $offset) {
-    id
-    avatar {
-      name
-      url
-    }
-    name
-    signature
+    ...BaseUser
   }
+}
+
+query MyFollowedUserList($filter: SearchInput, $limit: Int, $offset: Int) {
+  myFollowedUserList(filter: $filter, limit: $limit, offset: $offset) {
+    ...BaseUser
+  }
+}
+
+mutation FollowUser($input: IdInput!) {
+  followUser(input: $input)
+}
+
+mutation UnFollowUser($input: IdInput!) {
+  unFollowUser(input: $input)
+}
+
+query IsFollowedUser($filter: IdInput!) {
+  isFollowedUser(filter: $filter)
 }

@@ -1,5 +1,5 @@
 schema:
-  - http://localhost:80
+  - http://47.120.78.172:8000
 documents:
   - src/graphql/*.gql
 config:

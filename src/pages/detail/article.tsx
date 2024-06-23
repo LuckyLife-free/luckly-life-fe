@@ -1,8 +1,11 @@
 import {AsyncStatus, WithTitleBar} from '@/components'
 import {useArticleQuery} from '@/generated'
-import {ArrowBackRounded, StarRounded} from '@mui/icons-material'
-import {Avatar, Button, IconButton, Stack, Typography} from '@mui/material'
+import {defaultUser} from '@/helpers'
+import {ArrowBackRounded} from '@mui/icons-material'
+import {Avatar, IconButton, Stack, Typography} from '@mui/material'
 import {useNavigate, useSearchParams} from 'react-router-dom'
+import {FollowButton} from '../common/follow'
+import {StarButton} from '../common/star'
 
 export function ArticleDetail() {
   const navigate = useNavigate()
@@ -19,11 +22,7 @@ export function ArticleDetail() {
           <ArrowBackRounded />
         </IconButton>
       }
-      barRight={
-        <IconButton>
-          <StarRounded />
-        </IconButton>
-      }
+      barRight={<StarButton id={params.get('id')!} />}
     >
       <AsyncStatus loading={loading}>
         <Stack spacing={2} p={2}>
@@ -39,7 +38,7 @@ export function ArticleDetail() {
           >
             <Avatar
               sx={{width: 32, height: 32}}
-              src={data?.article?.author.avatar?.url}
+              src={data?.article?.author.avatar?.url ?? defaultUser}
               onClick={() =>
                 navigate(`/detail/user?id=${data?.article?.author.id}`)
               }
@@ -47,9 +46,7 @@ export function ArticleDetail() {
             <Typography variant="caption">
               {data?.article?.author.name}
             </Typography>
-            <Button size="small" variant="outlined" sx={{ml: 10, p: 0}}>
-              关注
-            </Button>
+            <FollowButton id={data?.article?.author.id ?? ''} />
           </Stack>
           <Typography variant="body2">{data?.article?.content}</Typography>
         </Stack>
